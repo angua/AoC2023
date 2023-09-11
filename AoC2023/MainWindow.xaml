@@ -37,7 +37,29 @@
             </Grid.ColumnDefinitions>
 
             <!-- Day list -->
-            
+            <ListView Grid.Column="0" ItemsSource="{Binding Days}" SelectedItem="{Binding SelectedDay, Mode=TwoWay}" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Image Source="{Binding Image}" />
+
+                            <StackPanel Grid.Column="1" Margin="10, 0, 0, 0" >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Day " />
+                                    <TextBlock Text="{Binding DayNumber}" />
+                                </StackPanel>
+                                <TextBlock Text="{Binding Title}" />
+                            </StackPanel>
+
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
             <!-- current day -->
             

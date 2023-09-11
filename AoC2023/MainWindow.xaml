@@ -62,7 +62,11 @@
             </ListView>
 
             <!-- current day -->
-            
+            <ContentControl Margin="20, 0, 0, 0" x:Name="DayContent" Grid.Column="1" Content="{Binding SelectedDay}">
+                <ContentControl.ContentTemplateSelector>
+                    <local:DayTemplateSelector />
+                </ContentControl.ContentTemplateSelector>
+            </ContentControl>
 
         </Grid>
 

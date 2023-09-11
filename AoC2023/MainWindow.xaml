@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AoC2023"
+        xmlns:days="clr-namespace:AoC2023.Days"
         mc:Ignorable="d"
         Title="Advent of Code 2023" WindowState="Maximized" Height="1000" Width="1800">
     
@@ -64,7 +65,7 @@
             <!-- current day -->
             <ContentControl Margin="20, 0, 0, 0" x:Name="DayContent" Grid.Column="1" Content="{Binding SelectedDay}">
                 <ContentControl.ContentTemplateSelector>
-                    <local:DayTemplateSelector />
+                    <days:DayTemplateSelector />
                 </ContentControl.ContentTemplateSelector>
             </ContentControl>
 

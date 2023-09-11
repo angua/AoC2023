@@ -8,12 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CommonWPF\CommonWPF.csproj" />
+    <None Remove="Resources\Days\01\input.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Days\" />
-    <Folder Include="Resources\Days\" />
+    <EmbeddedResource Include="Resources\Days\01\input.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CommonWPF\CommonWPF.csproj" />
   </ItemGroup>
 
 </Project>

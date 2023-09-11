@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Media;
 
-namespace AoC2023;
+namespace AoC2023.Days;
 
 public class Day
 {
@@ -11,9 +9,9 @@ public class Day
 
     public string Title { get; set; }
 
-    public ImageSource Image { get; set; } 
+    public ImageSource Image { get; set; }
 
-    public Func<object> CreateViewModel { get; set; } 
+    public Func<object> CreateViewModel { get; set; }
 
     public Type ViewType { get; set; }
 

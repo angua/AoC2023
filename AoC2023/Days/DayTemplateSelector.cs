@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace AoC2023;
+namespace AoC2023.Days;
 
 internal class DayTemplateSelector : DataTemplateSelector
 {

@@ -11,4 +11,8 @@
     <ProjectReference Include="..\CommonWPF\CommonWPF.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Days\" />
+  </ItemGroup>
+
 </Project>

@@ -9,5 +9,40 @@
     
     <Grid>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Top Banner -->
+        <Border Margin="20" Grid.Row="0" BorderBrush="Gold" BorderThickness="4">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFFF9700"/>
+                    <GradientStop Color="Red" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <StackPanel  HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBlock  Foreground="Gold" Text="* " TextAlignment="Left" FontSize="32" />
+                <TextBlock Foreground="Gold" Text="Advent of Code 2023" FontSize="32" HorizontalAlignment="Center" />
+                <TextBlock HorizontalAlignment="Right" Foreground="Gold" FontSize="32" Text=" *" />
+            </StackPanel>
+        </Border>
+
+        <!-- Main part -->
+        <Grid Grid.Row="1"  Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Day list -->
+            
+
+            <!-- current day -->
+            
+
+        </Grid>
+
     </Grid>
 </Window>

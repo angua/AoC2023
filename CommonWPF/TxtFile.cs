@@ -1,28 +1,23 @@
-﻿using CommonWPF;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
-namespace CommonWPF
+namespace CommonWPF;
+
+public class TxtFile : ViewModelBase
 {
-    public class TxtFile : ViewModelBase
+    public string FilePath
     {
-        public string FilePath
-        {
-            get => GetValue<string>();
-            set => SetValue(value);
-        }
-        public string DisplayName
-        {
-            get => GetValue<string>();
-            set => SetValue(value);
-        }
+        get => GetValue<string>();
+        set => SetValue(value);
+    }
+    public string DisplayName
+    {
+        get => GetValue<string>();
+        set => SetValue(value);
+    }
 
-        public TxtFile(string filepath)
-        {
-            FilePath = filepath;
-            DisplayName = Path.GetFileNameWithoutExtension(FilePath);
-        }
+    public TxtFile(string filepath)
+    {
+        FilePath = filepath;
+        DisplayName = Path.GetFileNameWithoutExtension(FilePath);
     }
 }

@@ -7,9 +7,14 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommonWPF\CommonWPF.csproj" />
+    <None Remove="Resources\Days\input.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\Days\" />
+    <EmbeddedResource Include="Resources\Days\Day01\input.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AoC2023Lib\AoC2023Lib.csproj" />
+    <ProjectReference Include="..\CommonWPF\CommonWPF.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
 </Project>

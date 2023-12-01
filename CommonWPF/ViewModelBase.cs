@@ -2,44 +2,42 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 
-namespace CommonWPF
+namespace CommonWPF;
+
+public class ViewModelBase : INotifyPropertyChanged
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    private Dictionary<string, object> _values = new();
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected void RaisePropertyChanged(string propertyName)
     {
-        private Dictionary<string, object> _values = new();
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void RaisePropertyChanged(string propertyName)
+    protected T GetValue<T>([CallerMemberName]string propertyName = null)
+    {
+        if (_values.TryGetValue(propertyName, out var value))
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            return (T)value;
         }
+        return default(T);
+    }
 
-        protected T GetValue<T>([CallerMemberName]string propertyName = null)
+    protected void SetValue<T>(T value, [CallerMemberName]string propertyName = null)
+    {
+        SetValue(value, () => { }, propertyName);
+    }
+    protected void SetValue<T>(T value, Action changedCallback, [CallerMemberName] string propertyName = null)
+    {
+        if (!_values.TryGetValue(propertyName, out var oldValue) || !Equals(oldValue, value))
         {
-            if (_values.TryGetValue(propertyName, out var value))
-            {
-                return (T)value;
-            }
-            return default(T);
-        }
-
-        protected void SetValue<T>(T value, [CallerMemberName]string propertyName = null)
-        {
-            SetValue(value, () => { }, propertyName);
-        }
-        protected void SetValue<T>(T value, Action changedCallback, [CallerMemberName] string propertyName = null)
-        {
-            if (!_values.TryGetValue(propertyName, out var oldValue) || !Equals(oldValue, value))
-            {
-                _values[propertyName] = value;
-                RaisePropertyChanged(propertyName);
-                changedCallback();
-            }
-
+            _values[propertyName] = value;
+            RaisePropertyChanged(propertyName);
+            changedCallback();
         }
 
     }
+
 }

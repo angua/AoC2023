@@ -7,9 +7,11 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Resources\Days\Day01\calibrationinput.jpg" />
     <None Remove="Resources\Days\input.txt" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Days\Day01\calibrationinput.jpg" />
     <EmbeddedResource Include="Resources\Days\Day01\input.txt" />
   </ItemGroup>
   <ItemGroup>

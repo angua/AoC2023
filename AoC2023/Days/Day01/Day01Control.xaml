@@ -12,20 +12,27 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel>
-
-            <TextBox Text="{Binding CalibrationSum, Mode=OneWay}" />
-            <TextBox Text="{Binding SpelledCalibrationSum, Mode=OneWay}" />
+        <StackPanel Margin="20" >
+            <TextBlock Foreground="LightGray" Text="Calibration Number Sum" />
+            <TextBox Margin="0,10,0,0" Foreground="LightGray" Background="#FF161F52" Text="{Binding CalibrationSum, Mode=OneWay}" />
+            <TextBlock Margin="0,20,0,0"  Foreground="LightGray" Text="Respelled calibration number sum" />
+            <TextBox Margin="0,10,0,0" Foreground="LightGray" Background="#FF161F52" Text="{Binding SpelledCalibrationSum, Mode=OneWay}" />
         </StackPanel>
 
-        
+        <DataGrid Margin="20" Grid.Column="1" ItemsSource="{Binding CalibrationDataList}" >
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="#FF161F52" />
+                    <Setter Property="Foreground" Value="LightGray" />
+                </Style>
 
-            <DataGrid Grid.Column="1" ItemsSource="{Binding CalibrationDataList}">
-                
-            </DataGrid>
 
-       
-
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="lightgray" />
+                    <Setter Property="Foreground" Value="#FF161F52" />
+                </Style>
+            </DataGrid.Resources>
+        </DataGrid>
 
     </Grid>
 </UserControl>

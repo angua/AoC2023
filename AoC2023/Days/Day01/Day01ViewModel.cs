@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Advent2023.Utils;
 using AoC2023Lib.Days.Day01Lib;
-
 using CommonWPF;
 
 namespace AoC2023.Days.Day01;
@@ -38,16 +37,11 @@ public class Day01ViewModel : ViewModelBase
         }
 
         var list = Calibrinator.GetCalibrationNumbers();
-
         for (int i = 0; i < list.Count; i++)
         {
             CalibrationDataList[i].CalibrationNumber = list[i];
         }
-        
-
-
         CalibrationSum = Calibrinator.GetCalibrationSum(list);
-
 
         var replaceList = Calibrinator.GetSpelledCalibrationNums();
         for (int i = 0; i < replaceList.Count; i++)
@@ -55,22 +49,12 @@ public class Day01ViewModel : ViewModelBase
             CalibrationDataList[i].ReplacedCalibrationInput = replaceList[i];
         }
 
-
-
         var replaceNums = Calibrinator.GetCalibrationNumbers(replaceList);
         for (int i = 0; i < replaceNums.Count; i++)
         {
             CalibrationDataList[i].ReplacedCalibrationNumber = replaceNums[i];
         }
-
         SpelledCalibrationSum = Calibrinator.GetCalibrationSum(replaceNums);
-
     }
-
-   
-
-
-    
-
 
 }

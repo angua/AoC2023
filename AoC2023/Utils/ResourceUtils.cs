@@ -24,11 +24,15 @@ namespace Advent2023.Utils
         {
             using var stream = typeof(ResourceUtils).Assembly.GetManifestResourceStream($"AoC2023.Resources.Days.{folderName}.{fileName}");
             var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.StreamSource = stream;
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            bitmap.Freeze();
+
+            if (stream != null)
+            {
+                bitmap.BeginInit();
+                bitmap.StreamSource = stream;
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.EndInit();
+                bitmap.Freeze();
+            }
 
             return bitmap;
         }

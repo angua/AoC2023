@@ -14,6 +14,12 @@ public class Day03ViewModel : ViewModelBase
         set => SetValue(value);
     }
 
+    public int GearRatioSum
+    {
+        get => GetValue<int>();
+        set => SetValue(value);
+    }
+
     public Day03ViewModel()
     {
         var fileData = ResourceUtils.LoadDataFromResource("Day03", "input.txt");
@@ -22,6 +28,9 @@ public class Day03ViewModel : ViewModelBase
 
         var enignePartNumbers = Engineer.FindPartNumbers();
         EnginePartSum = Engineer.GetEnginePartSum(enignePartNumbers);
+
+        var gearPositions = Engineer.FindGearPositions();
+        GearRatioSum = Engineer.GetGearRatioSum(gearPositions);
 
     }
 

@@ -9,6 +9,7 @@
     <Grid>
         <StackPanel>
             <TextBox Text="{Binding EnginePartSum, Mode=OneWay}" />
+            <TextBox Text="{Binding GearRatioSum, Mode=OneWay}" />
         </StackPanel>
         
     </Grid>

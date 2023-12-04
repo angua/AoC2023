@@ -41,7 +41,7 @@ namespace AoC2023Lib.Days.Day03Lib
             _maxY = (int)Schematic.Max(p => p.Key.Y);
         }
 
-        public List<int> FindPartNumbers()
+        public List<SchematicNumber> FindPartNumbers()
         {
             // find all numbers
             var numbers = new List<SchematicNumber>();
@@ -72,7 +72,7 @@ namespace AoC2023Lib.Days.Day03Lib
             }
 
             // go through numbers and see if their neighbor is an engine part
-            var enginePartNumbers = new List<int>();
+            var enginePartNumbers = new List<SchematicNumber>();
             foreach (var num in numbers)
             {
                 var neighbors = FindNeighbors(num);
@@ -90,7 +90,7 @@ namespace AoC2023Lib.Days.Day03Lib
 
                 if (include)
                 {
-                    enginePartNumbers.Add(num.Number);
+                    enginePartNumbers.Add(num);
                 }
             }
 
@@ -125,9 +125,9 @@ namespace AoC2023Lib.Days.Day03Lib
             return result;
         }
 
-        public int GetEnginePartSum(List<int> partNumbers)
+        public int GetEnginePartSum(List<SchematicNumber> partNumbers)
         {
-            return partNumbers.Sum();
+            return partNumbers.Select(n => n.Number).Sum();
         }
 
 

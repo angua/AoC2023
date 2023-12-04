@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AoC2023Lib.Days.Day03Lib
 {
-    internal class SchematicNumber
+    public class SchematicNumber
     {
         public Dictionary<Vector2, char> Positions { get; set; } = new();
 

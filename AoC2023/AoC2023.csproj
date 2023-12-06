@@ -9,15 +9,23 @@
   <ItemGroup>
     <None Remove="Resources\Days\Day01\calibrationinput.jpg" />
     <None Remove="Resources\Days\Day02\input.txt" />
+    <None Remove="Resources\Days\Day03\gear.jpg" />
     <None Remove="Resources\Days\Day03\input.txt" />
     <None Remove="Resources\Days\Day04\input.txt" />
+    <None Remove="Resources\Days\Day05\input.txt" />
+    <None Remove="Resources\Days\Day05\test.txt" />
+    <None Remove="Resources\Days\Day06\input.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Days\Day01\calibrationinput.jpg" />
     <EmbeddedResource Include="Resources\Days\Day01\input.txt" />
     <EmbeddedResource Include="Resources\Days\Day02\input.txt" />
+    <EmbeddedResource Include="Resources\Days\Day03\gear.jpg" />
     <EmbeddedResource Include="Resources\Days\Day03\input.txt" />
     <EmbeddedResource Include="Resources\Days\Day04\input.txt" />
+    <EmbeddedResource Include="Resources\Days\Day05\test.txt" />
+    <EmbeddedResource Include="Resources\Days\Day05\input.txt" />
+    <EmbeddedResource Include="Resources\Days\Day06\input.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AoC2023Lib\AoC2023Lib.csproj" />

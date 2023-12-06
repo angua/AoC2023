@@ -19,8 +19,6 @@ public class Day06ViewModel : ViewModelBase
         set => SetValue(value);
     }
 
-    
-
     public Day06ViewModel()
     {
         var fileData = ResourceUtils.LoadDataFromResource("Day06", "input.txt");

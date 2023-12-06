@@ -9,7 +9,7 @@ internal class Day01Provider : IDayProvider
         return new Day
         {
             DayNumber = 1,
-            Title = "Trebuchet",
+            Title = "Trebuchet?!",
             Image = ResourceUtils.LoadBitmapFromResource("Day01", "calibrationinput.jpg"),
             CreateViewModel = () => new Day01ViewModel(),
             ViewType = typeof(Day01Control)

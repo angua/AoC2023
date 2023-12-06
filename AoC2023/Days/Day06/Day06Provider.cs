@@ -7,7 +7,7 @@ internal class Day06Provider : IDayProvider
         return new Day
         {
             DayNumber = 6,
-            Title = "Title",
+            Title = "Wait For It",
             // Image,
             CreateViewModel = () => new Day06ViewModel(),
             ViewType = typeof(Day06Control)

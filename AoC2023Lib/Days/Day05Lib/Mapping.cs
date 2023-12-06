@@ -8,5 +8,8 @@ public class Mapping
     public long SourceStart { get; set; }
     public long DestinationStart { get; set; }
 
+    public long SourceEnd => SourceStart + Range - 1;
+    public long DestinationEnd => DestinationStart + Range - 1;
+
     public long Range {  get; set; }
 }

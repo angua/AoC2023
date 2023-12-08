@@ -60,7 +60,7 @@ public class Day08ViewModel : ViewModelBase
 
 
         Steps = Navi.GetStepsToDestination();
-        // MultiSteps = Navi.GetMultiStepsToDestination();
+        MultiSteps = Navi.GetMultiStepsToDestination();
 
         NextStep = new RelayCommand(CanDoNextStep, DoNextStep);
 

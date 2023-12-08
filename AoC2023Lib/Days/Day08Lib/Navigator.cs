@@ -8,6 +8,8 @@ public class Navigator
 
     public List<Position> Positions { get; private set; } = new();
 
+    private List<Route> _routes = new();
+
 
     private Dictionary<string, Dictionary<int, Position>> _sequences = new();
     private Dictionary<string, List<int>> _targetSteps = new();
@@ -41,6 +43,14 @@ public class Navigator
         ConnectPositions();
 
         CurrentPositions = Positions.Where(p => p.Name.Last() == 'A').ToList();
+
+        foreach (var pos in CurrentPositions)
+        {
+            _routes.Add(new Route()
+            {
+                StartPosition = pos,
+            });
+        }
 
     }
 
@@ -101,22 +111,69 @@ public class Navigator
 
             if (targets.Any(t => t.Count > 0))
             {
-                var commonTargets = targets[0];
-
-                for (int i = 1; i < targets.Count; i++)
+                for (int i = 0; i < targets.Count; i++)
                 {
-                    if (commonTargets.Count > 0)
+                    foreach (var target in targets[i])
                     {
-                        var newTargets = commonTargets.Intersect(targets[i]).ToList();
-                        commonTargets = newTargets;
+                        var route = _routes[i];
+                        route.TargetSteps.Add((sequencesRun, target));
+                        if (route.TargetSteps.Count == 1)
+                        {
+                            route.FirstTargetSequence = sequencesRun;
+                        }
+
+                        if (route.TargetSteps.Count == 2)
+                        {
+                            route.TargetSequenceDiff = sequencesRun - route.TargetSteps[0].Item1;
+                        }
                     }
                 }
-                if (commonTargets.Count > 0)
+            }
+            if (_routes.All(r => r.TargetSequenceDiff > 0))
+            {
+                // found all diffs, now calculate when they all meet
+                // lowest common multiple
+
+                var primeFactors = new List<List<int>>();
+
+                for (int i = 0; i < _routes.Count; i++)
                 {
-                    return commonTargets.First() + sequencesRun * Instructions.Count;
+                    var route = _routes[i];
+                    var primes = GetPrimeFactors(route.TargetSequenceDiff);
+                    primeFactors.Add(primes);
                 }
 
+                var commonPrimes = primeFactors[0];
+
+                for (int i = 1; i < primeFactors.Count; i++)
+                {
+                    var intersected = commonPrimes.Intersect(primeFactors[i]);
+                    var exceptCommon = commonPrimes.Except(primeFactors[i]);
+                    var ecxeptNew = primeFactors[i].Except(commonPrimes);
+
+                    commonPrimes = intersected.ToList();
+                    commonPrimes.AddRange(exceptCommon);
+                    commonPrimes.AddRange(ecxeptNew);
+                }
+
+
+                long product = commonPrimes[0];
+                for (int i = 1; i < commonPrimes.Count; i++)
+                {
+                    product *= commonPrimes[i];
+                }
+
+                return (product - 1) * Instructions.Count + _routes.First().TargetSteps.First().Item2 + 1;
+
+
+
+
+
+
+
+
             }
+
 
 
 
@@ -128,46 +185,21 @@ public class Navigator
 
 
 
-        long steps = 0;
-        var currentInstructionNum = 0;
-
-        while (true)
-        {
-            var newPositions = new List<Position>();
-
-            var instruction = Instructions[currentInstructionNum];
-
-            foreach (var position in currentPositions)
-            {
-                if (Instructions[currentInstructionNum] == Instruction.Left)
-                {
-                    newPositions.Add(position.LeftPosition);
-                }
-                else
-                {
-                    newPositions.Add(position.RightPosition);
-                }
-            }
-
-            currentInstructionNum++;
-            if (currentInstructionNum >= Instructions.Count)
-            {
-                currentInstructionNum = 0;
-            }
-            steps++;
-
-            // all positions end with Z
-            if (newPositions.All(p => p.IsTarget))
-            {
-                break;
-            }
-
-            currentPositions = newPositions;
-        }
-
-        return steps;
     }
 
+    private List<int> GetPrimeFactors(int number)
+    {
+        var primes = new List<int>();
+
+        for (int div = 2; div <= number; div++)
+            while (number % div == 0)
+            {
+                primes.Add(div);
+                number = number / div;
+            }
+
+        return primes;
+    }
 
     private List<int> GetTargetSteps(Position startPos)
     {

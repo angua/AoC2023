@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http.Headers;
-using Common;
+﻿using Common;
 
 namespace AoC2023Lib.Days.Day07Lib;
 

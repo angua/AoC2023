@@ -231,6 +231,7 @@ public class Gardening
 
                 if (!found)
                 {
+                    
                     // start not inside range
                     // create direct mapping until the next mapping
                     var nextmapping = seedMappings.Where(m => m.SourceStart > start && m.SourceStart <= end)
@@ -255,7 +256,7 @@ public class Gardening
                     _validMappings.Add(validMapping);
                     // set start to the start of a new mapping
                     start = mappingEnd + 1;
-
+                    
                 }
             }
         }

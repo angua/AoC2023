@@ -9,6 +9,7 @@
     <Grid>
         <StackPanel>
             <TextBox Text="{Binding LongestDistanceFromStart}" />
+            <TextBox Text="{Binding EnclosedTilesCount}" />
         </StackPanel>
         
     </Grid>

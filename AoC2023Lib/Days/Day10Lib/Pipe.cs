@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
 namespace AoC2023Lib.Days.Day10Lib;
 
-internal class Pipe
+public class Pipe
 {
     public Vector2 Position { get; set; }
     public PipeOrientation Orientation { get; set; }
 
     public List<Vector2> Directions { get; set; }
 
-    public List<Pipe> Neighbors { get; set; } = new();
+    public Dictionary<Vector2, Pipe> Neighbors { get; set; } = new();
 
     public int? DistanceFomStart { get; set; } = null;
 

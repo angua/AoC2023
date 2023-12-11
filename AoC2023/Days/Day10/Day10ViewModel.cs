@@ -13,6 +13,11 @@ public class Day10ViewModel : ViewModelBase
         get => GetValue<int>();
         set => SetValue(value);
     }
+    public int EnclosedTilesCount
+    {
+        get => GetValue<int>();
+        set => SetValue(value);
+    }
 
     public Day10ViewModel()
     {
@@ -22,7 +27,7 @@ public class Day10ViewModel : ViewModelBase
 
         LongestDistanceFromStart = Pipee.GetLongestDistanceFromStart();
 
-
+        EnclosedTilesCount = Pipee.GetEnclosedTilesCount();
 
     }
 }

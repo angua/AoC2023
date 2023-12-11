@@ -6,7 +6,7 @@ public class CubeGameHandler
 {
     public List<CubeGame> CubeGames { get; set; } = new();
 
-    public List<CubeGame> GetPossibleDraws(Dictionary<Color, int> totalSet)
+    public List<CubeGame> GetPossibleGames(int[] totalSet)
     {
         var result = new List<CubeGame>();
 
@@ -22,7 +22,7 @@ public class CubeGameHandler
                 
                 foreach (var colorDraw in draw)
                 {
-                    if (colorDraw.Value > totalSet[colorDraw.Key])
+                    if (colorDraw.Value > totalSet[(int)colorDraw.Key])
                     {
                         valid = false;
                         break;
@@ -43,6 +43,5 @@ public class CubeGameHandler
         {
             CubeGames.Add(new CubeGame(line));
         }
-
     }
 }

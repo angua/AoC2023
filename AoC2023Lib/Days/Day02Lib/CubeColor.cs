@@ -1,6 +1,6 @@
 ﻿namespace AoC2023Lib.Days.Day02Lib;
 
-public enum Color
+public enum CubeColor
 {
     red,
     blue, 

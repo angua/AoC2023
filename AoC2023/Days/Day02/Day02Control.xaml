@@ -4,14 +4,133 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
+             xmlns:local="clr-namespace:AoC2023.Days.Day02"
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid>
-        <StackPanel>
-            
-        <TextBox Text="{Binding PossibleIdSum, Mode=OneWay}" />
-        <TextBox Text="{Binding PowerSum, Mode=OneWay}" />
+    <UserControl.Resources>
+        <local:CubeColorConverter x:Key="CubeColorConverter" />
+        <local:CubeCountConverter x:Key="CubeCountConverter" />
+    </UserControl.Resources>
+
+    <Grid Background="LightGray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+
+
+        <StackPanel Grid.Column="0" Margin="20">
+            <TextBlock Text="Total Set" />
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Row="0" Grid.Column="0" Height="15" Width="15" Background="Red" ></Border>
+                <Border Grid.Row="1" Grid.Column="0" Height="15" Width="15" Background="Green" ></Border>
+                <Border Grid.Row="2" Grid.Column="0" Height="15" Width="15" Background="Blue" ></Border>
+
+                <TextBox Grid.Row="0" Grid.Column="1" Height="15" Width="40" HorizontalAlignment="Left" Text="{Binding TotalSet.Red, Mode=TwoWay}"     />
+                <TextBox Grid.Row="1" Grid.Column="1" Height="15" Width="40" HorizontalAlignment="Left" Text="{Binding TotalSet.Green, Mode=TwoWay}" />
+                <TextBox Grid.Row="2" Grid.Column="1" Height="15" Width="40" HorizontalAlignment="Left" Text="{Binding TotalSet.Blue, Mode=TwoWay}" />
+
+            </Grid>
+
+            <TextBlock Margin="0,20,0,0" Text="Sum of Possible Game IDs" />
+            <TextBox Margin="0,10,0,0"  Text="{Binding PossibleIdSum, Mode=OneWay}" />
+            <TextBlock Margin="0,20,0,0" Text="Sum of Set Powers" />
+            <TextBox Margin="0,10,0,0" Text="{Binding PowerSum, Mode=OneWay}" />
         </StackPanel>
+
+        <DataGrid Grid.Column="1" ItemsSource="{Binding CubeGames}" AutoGenerateColumns="False" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID"  Binding="{Binding Id}" />
+                
+                <DataGridTemplateColumn Header="Draws">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+
+                            <ItemsControl ItemsSource="{Binding Draws}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Grid.Row="0" Grid.Column="0" Height="15" Width="15" Background="Red" ></Border>
+                                            <Border Grid.Row="1" Grid.Column="0" Height="15" Width="15" Background="Green" ></Border>
+                                            <Border Grid.Row="2" Grid.Column="0" Height="15" Width="15" Background="Blue" ></Border>
+
+                                            <TextBox Grid.Row="0" Grid.Column="1" Height="15" Width="40" HorizontalAlignment="Left" Text="{Binding Red, Mode=OneWay}"     />
+                                            <TextBox Grid.Row="1" Grid.Column="1" Height="15" Width="40" HorizontalAlignment="Left" Text="{Binding Green, Mode=OneWay}" />
+                                            <TextBox Grid.Row="2" Grid.Column="1" Height="15" Width="40" HorizontalAlignment="Left" Text="{Binding Blue, Mode=OneWay}" />
+
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Minimum Set">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Row="0" Grid.Column="0" Height="15" Width="15" Background="Red" ></Border>
+                                <Border Grid.Row="1" Grid.Column="0" Height="15" Width="15" Background="Green" ></Border>
+                                <Border Grid.Row="2" Grid.Column="0" Height="15" Width="15" Background="Blue" ></Border>
+
+                                <TextBox Grid.Row="0" Grid.Column="1" Height="15" Width="40" HorizontalAlignment="Left" Text="{Binding MinimumSet.Red, Mode=OneWay}"     />
+                                <TextBox Grid.Row="1" Grid.Column="1" Height="15" Width="40" HorizontalAlignment="Left" Text="{Binding MinimumSet.Green, Mode=OneWay}" />
+                                <TextBox Grid.Row="2" Grid.Column="1" Height="15" Width="40" HorizontalAlignment="Left" Text="{Binding MinimumSet.Blue, Mode=OneWay}" />
+
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>
+
+                <DataGridCheckBoxColumn Header="Valid with total set" Binding="{Binding IsValid, Mode=OneWay}" />
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
 
     </Grid>
 </UserControl>

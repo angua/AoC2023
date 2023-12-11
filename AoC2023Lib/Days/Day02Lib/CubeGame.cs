@@ -6,7 +6,9 @@ public class CubeGame
 
     public int Id { get; private set; }
 
-    public List<Dictionary<Color, int>> Draws { get; private set; } = new();
+    public List<Dictionary<CubeColor, int>> Draws { get; private set; } = new();
+
+    public Dictionary<CubeColor, int> MinimumSet { get; private set; } = new();
 
     public CubeGame(string line)
     {
@@ -26,15 +28,12 @@ public class CubeGame
         // 3 blue, 4 red
         foreach ( var drawpart in drawparts ) 
         {
-            var drawdict = new Dictionary<Color, int>()
-            { {Color.red, 0},
-             {Color.green, 0},
-             {Color.blue, 0},
+            var drawdict = new Dictionary<CubeColor, int>()
+            { {CubeColor.red, 0},
+             {CubeColor.green, 0},
+             {CubeColor.blue, 0},
             };
             var drawcolorparts = drawpart.Split(",", StringSplitOptions.RemoveEmptyEntries);
-
-
-
 
             // 3 blue
             foreach (var drawcolorpart in drawcolorparts )
@@ -43,29 +42,26 @@ public class CubeGame
                 drawdict[GetColor(colorparts[1])] = int.Parse(colorparts[0]);
             }
             Draws.Add(drawdict);
-
         }
 
-
-        
-
+        MinimumSet = GetMinimumSet();
     }
 
-    private Color GetColor(string colorString)
+    private CubeColor GetColor(string colorString)
     {
         return colorString switch
         {
-            "red" => Color.red,
-            "blue" => Color.blue,
-            "green" => Color.green
+            "red" => CubeColor.red,
+            "blue" => CubeColor.blue,
+            "green" => CubeColor.green
         };
     }
 
-    public Dictionary<Color, int> GetMinimumSet()
+    public Dictionary<CubeColor, int> GetMinimumSet()
     {
-        var set = new Dictionary<Color, int>();
+        var set = new Dictionary<CubeColor, int>();
 
-        foreach (Color color in Enum.GetValues(typeof(Color)))
+        foreach (CubeColor color in Enum.GetValues(typeof(CubeColor)))
         {
             var maxdraw = Draws.Max(d => d[color]);
             set[color] = maxdraw;

@@ -36,6 +36,8 @@ internal class MainViewModel : ViewModelBase
         }
 
         Days = Days.OrderBy(d => d.DayNumber).ToList();
+
+        SelectedDay = Days.FirstOrDefault(d => d.DayNumber == 10);
     }
     
 

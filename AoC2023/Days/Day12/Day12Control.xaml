@@ -7,9 +7,20 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
-        <StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.Column="0">
             <TextBox Text="{Binding ArrangementSum, Mode=OneWay}" />
+            <TextBox Text="{Binding UnfoldedArrangementSum, Mode=OneWay}" />
         </StackPanel>
+
+        <DataGrid Grid.Column="1" ItemsSource="{Binding Rows}">
+            
+        </DataGrid>
+            
         
     </Grid>
 </UserControl>

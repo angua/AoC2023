@@ -6,25 +6,47 @@ public class SpringHandler
 {
     public List<SpringLine> SpringLines { get; set; } = new();
 
+    internal SpringHelper Helper { get; set; } = new();
+
+    
 
     public void Parse(Filedata fileData)
     {
         // ..???#??.?????? 4,3
         foreach (var line in fileData.Lines) 
         {
-            SpringLines.Add(new SpringLine(line));
+            SpringLines.Add(new SpringLine(line)
+            {
+                Helper = Helper
+            });
         }
     }
 
-    public int GetArrangementSum()
+    public long GetArrangementSum()
     {
-        var sum = 0;
-        foreach (var row in SpringLines) 
+        long sum = 0;
+        foreach (var line in SpringLines) 
         {
-            var arrangementCount = row.GetArrangementCount();
+            var arrangementCount = line.GetArrangementCount();
             sum += arrangementCount;
         }
         return sum;
     }
 
+    public long GetUnfoldedArrangementSum()
+    {
+        foreach (var row in SpringLines)
+        {
+            row.Unfold();
+        }
+
+        long sum = 0;
+        foreach (var line in SpringLines)
+        {
+            var arrangementCount = line.GetUnfoldedArrangementCount();
+            sum += arrangementCount;
+        }
+        return sum;
+
+    }
 }

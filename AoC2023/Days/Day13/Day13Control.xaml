@@ -9,6 +9,7 @@
     <Grid>
         <StackPanel>
             <TextBox Text="{Binding MirrorSum, Mode=OneWay}" />
+            <TextBox Text="{Binding SmudgedMirrorSum, Mode=OneWay}" />
         </StackPanel>
         
     </Grid>

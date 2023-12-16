@@ -1,30 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using AoC2023Lib.Days.Day13Lib;
 
-namespace AoC2023.Days.Day13
+namespace AoC2023.Days.Day13;
+
+public class VisualPattern
 {
-    public class VisualPattern
+    private Pattern _pattern;
+
+    public ObservableCollection<object> VisualGrid { get; set; } = new();
+    public ObservableCollection<object> SmudgedVisualGrid { get; set; } = new();
+
+    
+
+    public VisualPattern(Pattern pattern)
     {
-        private Pattern _pattern;
+        _pattern = pattern;
 
-        public ObservableCollection<object> VisualGrid { get; set; } = new();
-        public ObservableCollection<object> SmudgedVisualGrid { get; set; } = new();
-
-        
-
-        public VisualPattern(Pattern pattern)
+        foreach (var element in pattern.Grid)
         {
-            _pattern = pattern;
-
-            foreach (var element in pattern.Grid)
-            {
-                VisualGrid.Add(new GridPosition(element));
-            }
+            VisualGrid.Add(new GridPosition(element));
         }
     }
 }

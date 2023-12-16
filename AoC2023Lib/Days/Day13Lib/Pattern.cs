@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Net.NetworkInformation;
-using System.Numerics;
+﻿using System.Numerics;
 using Common;
 
 namespace AoC2023Lib.Days.Day13Lib;
@@ -14,10 +12,6 @@ public class Pattern
 
     private Dictionary<int, byte[]> _byteRows = new();
     private Dictionary<int, byte[]> _byteColumns = new();
-
-    // reverse lookup <ground string, row ids>
-    private Dictionary<string, List<int>> _equalRows = new();
-    private Dictionary<string, List<int>> _equalColumns = new();
 
     private double? _rowMirror = null;
     private double? _columnMirror = null;
@@ -35,9 +29,6 @@ public class Pattern
 
     private int _maxX;
     private int _maxY;
-
-    private List<List<int>> _combinationsX;
-    private List<List<int>> _combinationsY;
 
     private Vector2 _flipPosition;
 
@@ -70,9 +61,6 @@ public class Pattern
         }
         _maxX = (int)Grid.Max(p => p.Key.X);
         _maxY = _byteRows.Count - 1;
-
-        _combinationsX = MathUtils.GetAllCombinations(_maxX, 2);
-        _combinationsY = MathUtils.GetAllCombinations(_maxY, 2);
     }
 
     private Dictionary<int, byte[]> CreateArrays(Dictionary<int, string> line)
@@ -253,6 +241,7 @@ public class Pattern
 
     private void FindSmudgedMirror()
     {
+        // go through grid and change each position
         for (int y = 0; y <= _maxY; y++)
         {
             if (_columnSmudgedMirror != null || _rowSmudgedMirror != null)
@@ -344,6 +333,7 @@ public class Pattern
 
     private HashSet<double> TryFindMirrors(Dictionary<int, byte[]> lines)
     {
+        // go through all line combinations
         var combinations = MathUtils.GetAllCombinations(lines.Count, 2);
 
         var result = new HashSet<double>();
@@ -362,7 +352,7 @@ public class Pattern
             var diff = GetDiff(firstLine, secondLine);
 
             // sum of different positions
-            // 0 when lines are equal, 1 when there is only 1 different position
+            // 0 when lines are equal
             var diffSum = GetDiffSum(diff);
 
             diffs[(firstId, secondId)] = diff;
@@ -386,17 +376,18 @@ public class Pattern
 
                 while (isInLines)
                 {
+                    // lines on both sides of the mirror must be equal
                     var testPos1 = (int)(center - 0.5 - testOffset);
                     var testPos2 = (int)(center + 0.5 + testOffset);
 
-                    var testPair = (testPos1, testPos2);
-
+                    // outside grid
                     if (!lines.ContainsKey(testPos1) || !lines.ContainsKey(testPos2))
                     {
                         isInLines = false;
                         break;
                     }
 
+                    var testPair = (testPos1, testPos2);
 
                     if (!equalPairs.Contains(testPair))
                     {

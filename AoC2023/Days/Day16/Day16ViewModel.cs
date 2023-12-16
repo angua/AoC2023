@@ -1,3 +1,5 @@
+using Advent2023.Utils;
+
 namespace AoC2023.Days.Day16;
 
 public class Day16ViewModel

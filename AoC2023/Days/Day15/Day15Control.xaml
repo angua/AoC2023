@@ -7,6 +7,9 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
+        <StackPanel>
+            <TextBox Text="{Binding HashSum, Mode=OneWay}" />
+        </StackPanel>
         
     </Grid>
 </UserControl>

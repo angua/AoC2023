@@ -63,6 +63,7 @@ public class PlatformControl
 
             if (!loopFound)
             {
+                // todo has grid as key
                 var newConfiguration = GetConfiguration();
                 foreach (var config in _configurations)
                 {

@@ -9,6 +9,7 @@
     <Grid>
         <StackPanel>
             <TextBox Text="{Binding HashSum, Mode=OneWay}" />
+            <TextBox Text="{Binding FocusPower, Mode=OneWay}" />
         </StackPanel>
         
     </Grid>

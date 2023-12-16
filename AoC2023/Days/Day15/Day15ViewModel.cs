@@ -8,11 +8,13 @@ public class Day15ViewModel
     public HashControl Control { get; } = new();
 
     public int HashSum { get; set; }
+    public int FocusPower { get; set; }
     public Day15ViewModel()
     {
         var fileData = ResourceUtils.LoadDataFromResource("Day15", "input.txt");
         Control.Parse(fileData);
 
         HashSum = Control.GetHashSum();
+        FocusPower = Control.GetFocusPower();
     }
 }

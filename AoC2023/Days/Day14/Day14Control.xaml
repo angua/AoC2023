@@ -8,7 +8,8 @@
 
     <Grid>
         <StackPanel>
-            <TextBox Text="{Binding Load}" />
+            <TextBox Text="{Binding Load, Mode=OneWay}" />
+            <TextBox Text="{Binding LoadAfter1BCycles, Mode=OneWay}" />
         </StackPanel>
     </Grid>
 </UserControl>

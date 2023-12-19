@@ -3,13 +3,55 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AoC2023.Days.Day17" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <local:LossColorConverter x:Key="LossColorConverter" />
+        <local:PositionXConverter x:Key="PositionXConverter" />
+        <local:PositionYConverter x:Key="PositionYConverter" />
+        <local:ElementSelector x:Key="ElementSelector" />
+
+        <DataTemplate x:Key="PositionTemplate">
+            <Border Height="10" Width="10" Background="{Binding Loss, Converter={StaticResource LossColorConverter}}">
+                <TextBlock FontSize="6" Text="{Binding Loss}" />
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
     <Grid>
-        <StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
             <TextBox Text="{Binding LowestHeatLoss}" />
+            <TextBox Text="{Binding LowestUltraHeatLoss}" />
         </StackPanel>
-        
+
+        <ScrollViewer Grid.Column="1">
+            <ItemsControl ItemsSource="{Binding HeatLossMap}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="{Binding MapWidth, Converter={StaticResource PositionXConverter}}" Height="{Binding MapHeight, Converter={StaticResource PositionYConverter}}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemContainerStyle>
+                    <Style >
+                        <Setter Property="Canvas.Left" Value="{Binding PositionX, Converter={StaticResource PositionXConverter}}" />
+                        <Setter Property="Canvas.Top" Value="{Binding PositionY, Converter={StaticResource PositionYConverter}}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
+                <ItemsControl.ItemTemplateSelector>
+                    <local:ElementSelector />
+                </ItemsControl.ItemTemplateSelector>
+
+            </ItemsControl>
+        </ScrollViewer>
+
     </Grid>
 </UserControl>

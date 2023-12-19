@@ -27,6 +27,7 @@
     <None Remove="Resources\Days\Day15\input.txt" />
     <None Remove="Resources\Days\Day16\input.txt" />
     <None Remove="Resources\Days\Day17\input.txt" />
+    <None Remove="Resources\Days\Day17\test.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Days\Day01\calibrationinput.jpg" />
@@ -49,6 +50,7 @@
     <EmbeddedResource Include="Resources\Days\Day13\input.txt" />
     <EmbeddedResource Include="Resources\Days\Day15\input.txt" />
     <EmbeddedResource Include="Resources\Days\Day16\input.txt" />
+    <EmbeddedResource Include="Resources\Days\Day17\test.txt" />
     <EmbeddedResource Include="Resources\Days\Day17\input.txt" />
   </ItemGroup>
   <ItemGroup>

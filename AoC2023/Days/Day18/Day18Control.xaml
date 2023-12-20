@@ -7,9 +7,33 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
-        <StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.Column="0">
             <TextBox Text="{Binding LavaVolume, Mode=OneWay}" />
+            <TextBox Text="{Binding RealLavaVolume, Mode=OneWay}" />
         </StackPanel>
+
+        <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+            <ItemsControl ItemsSource="{Binding Edges}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="{Binding MapWidth}" Height="{Binding MapHeight}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Line StrokeThickness="1" Stroke="Black" X1="{Binding StartX}" Y1="{Binding StartY}" X2="{Binding EndX}" Y2="{Binding EndY}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+            </ItemsControl>
+
+        </ScrollViewer>
         
     </Grid>
 </UserControl>

@@ -57,6 +57,8 @@ public class MathUtils
         var rightPositions = new HashSet<Vector2>();
         var leftPositions = new HashSet<Vector2>();
 
+        var hashEdges = edges.ToHashSet();
+
         for (int i = 0; i < edges.Count; i++)
         {
             var currentPosition = edges[i];
@@ -66,11 +68,11 @@ public class MathUtils
             var dir = nextPosition - currentPosition;
 
             // test positions orthogonal to current tile
-            outside = TestOrthogonalPositions(currentPosition, edges, dir, minBoundary, maxBoundary,
+            outside = TestOrthogonalPositions(currentPosition, hashEdges, dir, minBoundary, maxBoundary,
                                             rightPositions, leftPositions, outside);
 
             // test positions orthogonal to next tile
-            outside = TestOrthogonalPositions(nextPosition, edges, dir, minBoundary, maxBoundary,
+            outside = TestOrthogonalPositions(nextPosition, hashEdges, dir, minBoundary, maxBoundary,
                                                 rightPositions, leftPositions, outside);
         }
 
@@ -85,7 +87,7 @@ public class MathUtils
     }
 
 
-    private static Side TestOrthogonalPositions(Vector2 currentPosition, List<Vector2> edges, Vector2 dir,
+    private static Side TestOrthogonalPositions(Vector2 currentPosition, HashSet<Vector2> edges, Vector2 dir,
                                             Vector2 minBoundary, Vector2 maxBoundary,
                                             HashSet<Vector2> rightPositions, HashSet<Vector2> leftPositions, Side outside)
     {
@@ -119,7 +121,7 @@ public class MathUtils
         return outside;
     }
 
-    private static void FindPositions(HashSet<Vector2> foundPositions, Vector2 startPos, List<Vector2> edges,
+    private static void FindPositions(HashSet<Vector2> foundPositions, Vector2 startPos, HashSet<Vector2> edges,
                                     Vector2 minBoundary, Vector2 maxBoundary, out bool isOutside)
     {
         isOutside = false;
@@ -131,14 +133,14 @@ public class MathUtils
         }
 
         // flood fill
-        var availablePositions = new HashSet<Vector2>();
+        var availablePositions = new Stack<Vector2>();
         var visitedPositions = new HashSet<Vector2>();
 
-        availablePositions.Add(startPos);
+        availablePositions.Push(startPos);
 
         while (availablePositions.Count > 0)
         {
-            var testPos = availablePositions.First();
+            var testPos = availablePositions.Pop();
 
             if (InsideBoundary(testPos, minBoundary, maxBoundary))
             {
@@ -152,7 +154,7 @@ public class MathUtils
                         var newPos = testPos + dir;
                         if (!visitedPositions.Contains(newPos))
                         {
-                            availablePositions.Add(newPos);
+                            availablePositions.Push(newPos);
                         }
                     }
                 }
@@ -163,7 +165,6 @@ public class MathUtils
                 isOutside = true;
                 break;
             }
-            availablePositions.Remove(testPos);
             visitedPositions.Add(testPos);
         }
 

@@ -8,10 +8,11 @@ public class MachinePartSorter
 
     public List<PartRating> PartRatings { get; set; } = new();
 
-
     private List<PartRating> _accepted = new();
     private List<PartRating> _rejected = new();
 
+    private List<PartRatingRange> _acceptedRange = new();
+    private List<PartRatingRange> _rejectedRange = new();
 
 
     public void Parse(Filedata fileData)
@@ -30,7 +31,6 @@ public class MachinePartSorter
             }
 
             var workflow = new Workflow(line);
-
             Workflows.Add(workflow.Name, workflow);
         }
 
@@ -49,11 +49,8 @@ public class MachinePartSorter
     public int GetRatingSum()
     {
         Sort();
-
         return _accepted.Select(i => i.RatingSum).Sum();
     }
-
-
 
 
     public void Sort()
@@ -115,6 +112,92 @@ public class MachinePartSorter
         if (!queue.TryGetValue(workflow, out var partsList))
         {
             partsList = new List<PartRating>();
+            queue.Add(workflow, partsList);
+        }
+        partsList.Add(item);
+    }
+
+
+    public ulong GetAllCombinations()
+    {
+        var startRanges = new PartRatingRange();
+
+        foreach (var category in Enum.GetValues(typeof(Category)))
+        {
+            startRanges.RatingRanges.Add((Category)category, (1, 4000));
+        }
+
+        var queue = new Dictionary<string, List<PartRatingRange>>();
+        var nextQueue = new Dictionary<string, List<PartRatingRange>>();
+
+        AddRangeToWorkFlow(queue, "in", startRanges);
+
+        // go through each Workflow to process items
+        while (true)
+        {
+            if (!queue.Any(w => w.Value.Count > 0))
+            {
+                break;
+            }
+
+            foreach (var workflowQueue in queue)
+            {
+                var name = workflowQueue.Key;
+                var ranges = workflowQueue.Value.ToList();
+                ProcessRanges(name, ranges, nextQueue);
+            }
+
+            queue = nextQueue;
+            nextQueue = new Dictionary<string, List<PartRatingRange>>();
+        }
+
+        var possibilities = _acceptedRange.Select(r => r.GetPossibilities());
+
+        ulong sum = 0;
+        foreach (var item in possibilities)
+        {
+            sum += item;
+        }
+        return sum;
+
+    }
+
+    private void ProcessRanges(string name, List<PartRatingRange> ranges, Dictionary<string, List<PartRatingRange>> nextQueue)
+    {
+        var workflow = Workflows[name];
+
+        foreach (var range in ranges)
+        {
+            var processedRanges = workflow.ProcessRanges(range);
+
+            foreach (var processed in processedRanges)
+            {
+                var destination = processed.Item1;
+                var processedRange = processed.Item2;
+
+
+                if (destination == "A")
+                {
+                    _acceptedRange.Add(processedRange);
+                }
+                else if (destination == "R")
+                {
+                    _rejectedRange.Add(processedRange);
+                }
+                else
+                {
+                    AddRangeToWorkFlow(nextQueue, destination, processedRange);
+                }
+            }
+        }
+
+    }
+
+    private void AddRangeToWorkFlow(Dictionary<string, List<PartRatingRange>> queue, string workflow, PartRatingRange item)
+    {
+        if (!queue.TryGetValue(workflow, out var partsList))
+        {
+            partsList = new List<PartRatingRange>();
             queue.Add(workflow, partsList);
         }
         partsList.Add(item);

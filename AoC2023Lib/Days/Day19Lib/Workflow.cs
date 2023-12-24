@@ -35,4 +35,28 @@ public class Workflow
         }
         return Rules.Last().Destination;
     }
+
+    internal List<(string, PartRatingRange)> ProcessRanges(PartRatingRange range)
+    {
+        var rangesToSort = new List<(string, PartRatingRange)>();
+
+        var rangeToHandOver = range;
+
+        foreach (var rule in Rules)
+        {
+            if (rangeToHandOver != null)
+            {
+                var processed = rule.ProcessRange(rangeToHandOver);
+
+                if (processed.MatchingRange != null)
+                {
+                    rangesToSort.Add((processed.MatchingDestination, processed.MatchingRange));
+                }
+
+                rangeToHandOver = processed.UnmatchingRange;
+            }
+        }
+        return rangesToSort;
+    }
+
 }

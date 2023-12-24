@@ -9,9 +9,7 @@ public class Rule
     public Rule(string input)
     {
         // x{a<2006:qkq,m>2090:A,rfg}
-
         _ruleString = input;
-
         var parts = _ruleString.Split(":");
 
         if (parts.Length == 1)
@@ -27,11 +25,32 @@ public class Rule
     }
 
     public Condition? RuleCondition { get; set; } = null;
-    
+
     public string Destination { get; set; }
 
     internal bool CheckCondition(PartRating item)
     {
         return RuleCondition == null || RuleCondition.CheckCondition(item);
     }
+
+    public ProcessedRange ProcessRange(PartRatingRange range)
+    {
+        if (RuleCondition == null)
+        {
+            // no condition, everything matchng
+            var processed = new ProcessedRange();
+            processed.MatchingRange = range;
+            processed.MatchingDestination = Destination;
+            return processed;
+        }
+        else
+        {
+            var processed = RuleCondition.ProcessRange(range);
+            processed.MatchingDestination = Destination;
+            return processed;
+        }
+    }
+
+
+
 }

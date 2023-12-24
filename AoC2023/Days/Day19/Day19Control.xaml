@@ -9,6 +9,7 @@
     <Grid>
         <StackPanel>
             <TextBox Text="{Binding RatingSum, Mode=OneWay}" />
+            <TextBox Text="{Binding AllCombinations, Mode=OneWay}" />
         </StackPanel>
     </Grid>
 </UserControl>

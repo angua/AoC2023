@@ -15,10 +15,7 @@ public class SpringHandler
         // ..???#??.?????? 4,3
         foreach (var line in fileData.Lines) 
         {
-            SpringLines.Add(new SpringLine(line)
-            {
-                Helper = Helper
-            });
+            SpringLines.Add(new SpringLine(line));
         }
     }
 

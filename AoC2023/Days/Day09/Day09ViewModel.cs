@@ -1,5 +1,6 @@
 using Advent2023.Utils;
 using AoC2023Lib.Days.Day09Lib;
+using Common;
 using CommonWPF;
 
 namespace AoC2023.Days.Day09;

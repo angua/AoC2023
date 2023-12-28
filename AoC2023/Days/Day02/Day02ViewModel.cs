@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Advent2023.Utils;
 using AoC2023Lib.Days.Day02Lib;
+using Common;
 using CommonWPF;
 
 namespace AoC2023.Days.Day02;

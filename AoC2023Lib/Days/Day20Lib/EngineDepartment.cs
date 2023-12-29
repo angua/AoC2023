@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common;
+﻿using Common;
 
 namespace AoC2023Lib.Days.Day20Lib;
 
@@ -82,7 +77,7 @@ public class EngineDepartment
 
         for (int cycle = 0; cycle < 1000; cycle++)
         {
-            var (additionalLow, additionalHigh) = RunCycle();
+            var (additionalLow, additionalHigh) = RunCycle(cycle);
             lowCount += additionalLow;
             highCount += additionalHigh;
         }
@@ -90,8 +85,50 @@ public class EngineDepartment
         return lowCount * highCount;
     }
 
-  
-    public (long, long) RunCycle()
+    public long GetCyclesUntilSwitchedOn()
+    {
+        var snowEngineDevice = Devices.First(d => d.Name == "rx") as OutputDevice;
+
+        var previous = snowEngineDevice.Inputs.First();
+        previous.Tracking = true;
+
+        var cycle = 0;
+        var inputCycles = new Dictionary<Device, long>();
+
+        while (true)
+        {
+            for (int i = 0; i < 1000; i++)
+            {
+                cycle++;
+                RunCycle(cycle);
+            }
+
+            foreach (var input in previous.Inputs)
+            {
+                var highs = previous.SignalHistory.Where(s => s.Source == input && s.Pulse == SignalType.High).ToList();
+                if (highs.Count() > 1)
+                {
+                    var cyclediff = highs[1].Cycle - highs[0].Cycle;
+                    inputCycles[input] = cyclediff;
+                }
+
+                if (inputCycles.Count == 4)
+                {
+                    long product = 1;
+                    foreach (var device in inputCycles)
+                    {
+                        product *= device.Value;
+                    }
+                    return product;
+                }
+
+            }
+        }
+
+    }
+
+
+    public (long, long) RunCycle(long cycleNumber)
     {
         var signalQueue = new Queue<Signal>();
 
@@ -99,7 +136,10 @@ public class EngineDepartment
         long highSignalCount = 0;
 
         // start by pushing button (adding input signal to button)
-        var startSignal = StartButton.ProcessSignal(new Signal());
+        var startSignal = StartButton.ProcessSignal(new Signal()
+        {
+            Cycle = cycleNumber
+        });
 
         (lowSignalCount, highSignalCount) = CountPulses(startSignal, lowSignalCount, highSignalCount);
 
@@ -122,7 +162,6 @@ public class EngineDepartment
             {
                 signalQueue.Enqueue(signal);
             }
-
         }
 
         return (lowSignalCount, highSignalCount);
@@ -138,5 +177,4 @@ public class EngineDepartment
         return (lowSignalCount, highSignalCount);
     }
 
-   
 }

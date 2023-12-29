@@ -19,7 +19,8 @@ internal class Button : Device
             {
                 Source = this,
                 Destination = destination,
-                Pulse = SignalType.Low
+                Pulse = SignalType.Low,
+                Cycle = inputSignal.Cycle
             });
         }
 

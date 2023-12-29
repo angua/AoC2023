@@ -18,7 +18,8 @@ internal class Broadcaster : Device
             {
                 Source = this,
                 Destination = destination,
-                Pulse = inputSignal.Pulse
+                Pulse = inputSignal.Pulse,
+                Cycle = inputSignal.Cycle,
             });
         }
         return signals;

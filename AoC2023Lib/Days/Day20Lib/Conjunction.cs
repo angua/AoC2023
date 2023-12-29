@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AoC2023Lib.Days.Day20Lib;
+﻿namespace AoC2023Lib.Days.Day20Lib;
 
 internal class Conjunction : Device
 {
     // low false, high true
     private Dictionary<Device, bool> _inputStates = new();
+
 
     public Conjunction(string line)
     {
@@ -19,6 +14,11 @@ internal class Conjunction : Device
     public override List<Signal> ProcessSignal(Signal inputSignal)
     {
         var signals = new List<Signal>();
+
+        if (Tracking)
+        {
+            SignalHistory.Add(inputSignal);
+        }
 
         // update input state
         if (inputSignal.Pulse == SignalType.Low)
@@ -40,7 +40,8 @@ internal class Conjunction : Device
             {
                 Source = this,
                 Destination = destination,
-                Pulse = outputPulse
+                Pulse = outputPulse,
+                Cycle = inputSignal.Cycle,
             });
         }
         return signals;

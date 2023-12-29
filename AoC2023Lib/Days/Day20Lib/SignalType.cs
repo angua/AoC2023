@@ -2,7 +2,6 @@
 
 public enum SignalType
 {
-    None,
     Low,
     High
 }

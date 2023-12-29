@@ -5,4 +5,5 @@ public class Signal
     public Device Source { get; set; }
     public Device Destination { get; set; }
     public SignalType Pulse { get; set; }
+    public long Cycle { get; set; }
 }

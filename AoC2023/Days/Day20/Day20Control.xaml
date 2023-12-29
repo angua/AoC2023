@@ -9,6 +9,7 @@
     <Grid>
         <StackPanel>
             <TextBox Text="{Binding PulseProduct, Mode=OneWay}" />
+            <TextBox Text="{Binding CyclesUntilSwitchedOn, Mode=OneWay}" />
         </StackPanel>
         
     </Grid>

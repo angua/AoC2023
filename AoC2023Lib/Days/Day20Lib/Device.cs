@@ -9,7 +9,9 @@ public abstract class Device
     public List<Device> Inputs { get; set; } = new();
     public List<Device> Outputs { get; set; } = new();
 
-    public List<Signal> InputSignals { get; set; } = new();
+    public bool Tracking { get; set; } = false;
+
+    public List<Signal> SignalHistory { get; set; } = new();
 
     public void Parse(string line)
     {

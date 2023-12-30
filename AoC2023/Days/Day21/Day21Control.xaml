@@ -9,6 +9,7 @@
     <Grid>
         <StackPanel>
             <TextBox Text="{Binding Plots64Steps, Mode=OneWay}" />
+            <TextBox Text="{Binding Plots26MSteps, Mode=OneWay}" />
         </StackPanel>
         
     </Grid>

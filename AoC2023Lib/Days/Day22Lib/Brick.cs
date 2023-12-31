@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
 namespace AoC2023Lib.Days.Day22Lib;
 
@@ -18,8 +13,8 @@ internal class Brick
 
     public List<Vector3> Endpositions { get; set; } = new();
 
-    public HashSet<int> BricksBelow { get; set; } = new();
-    public HashSet<int> BricksAbove { get; set; } = new();
+    public HashSet<Brick> BricksBelow { get; set; } = new();
+    public HashSet<Brick> BricksAbove { get; set; } = new();
 
 
     public Brick(string line)

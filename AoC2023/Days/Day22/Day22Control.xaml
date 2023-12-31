@@ -9,6 +9,7 @@
     <Grid>
         <StackPanel>
             <TextBox Text="{Binding DisintegrateSum, Mode=OneWay}" />
+            <TextBox Text="{Binding FallingSum, Mode=OneWay}" />
         </StackPanel>
     </Grid>
 </UserControl>

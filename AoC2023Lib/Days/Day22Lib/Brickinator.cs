@@ -12,6 +12,10 @@ public class Brickinator
     // position, brick id
     private Dictionary<Vector3, int> _brickPositions = new();
 
+    private List<Brick> _bricksToDisintegrate = new();
+
+
+
     public void Parse(Filedata fileData)
     {
         foreach (var line in fileData.Lines)
@@ -22,7 +26,6 @@ public class Brickinator
         }
 
         _sortedBricks = _bricks.OrderBy(b => b.StartPos1.Z).ToList();
-
 
         DropBricks();
         ConnectBricks();
@@ -88,7 +91,6 @@ public class Brickinator
         foreach (var brick in _sortedBricks)
         {
             // look below
-
             // bottom area
             var zBottom = brick.Endpositions.Min(p => p.Z);
 
@@ -101,10 +103,10 @@ public class Brickinator
                     var testPos = new Vector3(bottomPos.X, bottomPos.Y, bottomPos.Z - 1);
                     if (_brickPositions.TryGetValue(testPos, out var otherBrickId))
                     {
-                        brick.BricksBelow.Add(otherBrickId);
-
                         var otherBrick = _bricks.First(b => b.Id == otherBrickId);
-                        otherBrick.BricksAbove.Add(brick.Id);
+
+                        brick.BricksBelow.Add(otherBrick);
+                        otherBrick.BricksAbove.Add(brick);
                     }
                 }
 
@@ -115,30 +117,75 @@ public class Brickinator
 
     public long GetDisintegrateSum()
     {
-        var bricksToDisintegrate = new List<Brick>();
-        foreach ( var brick in _sortedBricks)
+        foreach (var brick in _sortedBricks)
         {
             if (brick.BricksAbove.Count == 0)
             {
-                bricksToDisintegrate.Add(brick);
+                _bricksToDisintegrate.Add(brick);
             }
             else
             {
-                var canDisintegtrate = true;
-                foreach (var brickAboveId in brick.BricksAbove)
+                var canDisintegrate = true;
+                foreach (var brickAbove in brick.BricksAbove)
                 {
-                    var brickAbove = _bricks.First(b => b.Id == brickAboveId);
                     if (brickAbove.BricksBelow.Count == 1)
                     {
-                        canDisintegtrate = false;
+                        canDisintegrate = false;
                     }
                 }
-                if (canDisintegtrate)
+                if (canDisintegrate)
                 {
-                    bricksToDisintegrate.Add(brick);
+                    _bricksToDisintegrate.Add(brick);
                 }
             }
         }
-        return bricksToDisintegrate.Count;
+        return _bricksToDisintegrate.Count;
     }
+
+    public long GetFallingSum()
+    {
+        var fallingBrickSum = 0;
+
+        var bricksWithFalling = _bricks.Except(_bricksToDisintegrate);
+
+        foreach (var brick in bricksWithFalling)
+        {
+            var fallingBricks = new HashSet<Brick>();
+            var bricksToInvestigate = new Queue<Brick>();
+
+            bricksToInvestigate.Enqueue(brick);
+
+            while (bricksToInvestigate.Count > 0)
+            {
+                var testBrick = bricksToInvestigate.Dequeue();
+
+                var bricksAbove = testBrick.BricksAbove;
+
+                foreach (var brickAbove in bricksAbove)
+                {
+                    var falling = true;
+                    var bricksBelowBrickAbove = brickAbove.BricksBelow;
+
+                    foreach (var brickBelow in bricksBelowBrickAbove)
+                    {
+                        if (brickBelow != brick && !fallingBricks.Contains(brickBelow))
+                        {
+                            falling = false;
+                            break;
+                        }
+                    }
+                    if (falling)
+                    {
+                        fallingBricks.Add(brickAbove);
+                        bricksToInvestigate.Enqueue(brickAbove);
+                    }
+
+                }
+            }
+
+            fallingBrickSum += fallingBricks.Count;
+        }
+        return fallingBrickSum;
+    }
+
 }

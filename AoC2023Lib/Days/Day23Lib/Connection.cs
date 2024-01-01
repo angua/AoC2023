@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AoC2023Lib.Days.Day23Lib
 {
-    internal class Connection
+    public class Connection
     {
         public Route Path { get; set; }
 

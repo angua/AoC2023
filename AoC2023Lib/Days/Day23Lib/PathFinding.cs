@@ -5,10 +5,14 @@ namespace AoC2023Lib.Days.Day23Lib;
 
 public class PathFinding
 {
-    private Dictionary<Vector2, Tile> _grid = new();
+    public Dictionary<Vector2, Tile> Grid { get; private set; } = new();
 
     private int _maxX;
     private int _maxY;
+
+    public int Height { get; private set; }
+    public int Width { get; private set; }
+
 
     public void Parse(Filedata fileData)
     {
@@ -20,12 +24,16 @@ public class PathFinding
                 var pos = new Vector2(x, y);
                 var tile = new Tile(line[x]);
                 tile.Position = pos;
-                _grid[pos] = tile;
+                Grid[pos] = tile;
             }
         }
 
-        _maxX = (int)_grid.Max(p => p.Key.X);
-        _maxY = (int)_grid.Max(p => p.Key.Y);
+        _maxX = (int)Grid.Max(p => p.Key.X);
+        _maxY = (int)Grid.Max(p => p.Key.Y);
+
+        Width = _maxX + 1;
+        Height = _maxY + 1;
+
 
         FindNeighbors();
         FindNeighborsWithoutSlopes();
@@ -34,7 +42,7 @@ public class PathFinding
 
     private void FindNeighbors()
     {
-        foreach (var tile in _grid)
+        foreach (var tile in Grid)
         {
             var validDirections = new List<Vector2>();
             if (tile.Value.Ground == '#')
@@ -78,7 +86,7 @@ public class PathFinding
             {
                 var newPos = tile.Key + direction;
 
-                if (_grid.TryGetValue(newPos, out var newTile))
+                if (Grid.TryGetValue(newPos, out var newTile))
                 {
                     if (newTile.Ground == '#')
                     {
@@ -124,7 +132,7 @@ public class PathFinding
 
     private void FindNeighborsWithoutSlopes()
     {
-        foreach (var tile in _grid)
+        foreach (var tile in Grid)
         {
             var validDirections = new List<Vector2>();
             if (tile.Value.Ground == '#')
@@ -143,7 +151,7 @@ public class PathFinding
             {
                 var newPos = tile.Key + direction;
 
-                if (_grid.TryGetValue(newPos, out var newTile))
+                if (Grid.TryGetValue(newPos, out var newTile))
                 {
                     if (newTile.Ground == '#')
                     {
@@ -160,12 +168,10 @@ public class PathFinding
     }
 
 
-
-
     public long FindLongestPath(bool useSlopes = true)
     {
-        var start = _grid.Where(p => p.Key.Y == 0 && p.Value.Ground == '.').First();
-        var end = _grid.Where(p => p.Key.Y == _maxY && p.Value.Ground == '.').First();
+        var start = Grid.Where(p => p.Key.Y == 0 && p.Value.Ground == '.').First();
+        var end = Grid.Where(p => p.Key.Y == _maxY && p.Value.Ground == '.').First();
 
         var routes = new Stack<Route>();
 
@@ -215,13 +221,13 @@ public class PathFinding
         // get connections between crossroads
         FindConnections();
 
-        var crossroads = _grid.Where(t => t.Value.Connections.Count > 0);
+        var crossroads = Grid.Where(t => t.Value.Connections.Count > 0);
 
 
 
         // move from one connection to the left trying all possibilities
-        var start = _grid.Where(p => p.Key.Y == 0 && p.Value.Ground == '.').First();
-        var end = _grid.Where(p => p.Key.Y == _maxY && p.Value.Ground == '.').First();
+        var start = Grid.Where(p => p.Key.Y == 0 && p.Value.Ground == '.').First();
+        var end = Grid.Where(p => p.Key.Y == _maxY && p.Value.Ground == '.').First();
 
         // all connections from start
         var paths = new Queue<List<ConnectionPath>>();
@@ -287,8 +293,8 @@ public class PathFinding
 
     private void FindConnections()
     {
-        var start = _grid.Where(p => p.Key.Y == 0 && p.Value.Ground == '.').First();
-        var end = _grid.Where(p => p.Key.Y == _maxY && p.Value.Ground == '.').First();
+        var start = Grid.Where(p => p.Key.Y == 0 && p.Value.Ground == '.').First();
+        var end = Grid.Where(p => p.Key.Y == _maxY && p.Value.Ground == '.').First();
 
         var crossroads = new Queue<Tile>();
 

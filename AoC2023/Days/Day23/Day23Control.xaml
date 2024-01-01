@@ -3,14 +3,54 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AoC2023.Days.Day23"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <local:BackgroundConverter x:Key="BackgroundConverter" />
+        <local:PositionConverter x:Key="PositionConverter" />
+        <local:GroundTextConverter x:Key="GroundTextConverter" />
+    </UserControl.Resources>
+
     <Grid>
-        <StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.Column="0">
             <TextBox Text="{Binding LongestPath, Mode=OneWay}" />
             <TextBox Text="{Binding LongestPathWithoutSlopes, Mode=OneWay}" />
         </StackPanel>
+
+        <ScrollViewer Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+            <ItemsControl ItemsSource="{Binding VisualGrid}" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="{Binding Width, Converter={StaticResource PositionConverter}}" Height="{Binding Height, Converter={StaticResource PositionConverter}}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding PositionX, Converter={StaticResource PositionConverter}}" />
+                        <Setter Property="Canvas.Top" Value="{Binding PositionY, Converter={StaticResource PositionConverter}}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Height="13" Width="13" BorderThickness="0" 
+                                Background="{Binding Ground, Converter={StaticResource BackgroundConverter}}" >
+                            <TextBlock Height="10" Width="10" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                       FontSize="9" Text="{Binding Ground, Converter={StaticResource GroundTextConverter}}" Foreground="Black" TextAlignment="Center" />
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                
+            </ItemsControl>
+        </ScrollViewer>
         
     </Grid>
 </UserControl>

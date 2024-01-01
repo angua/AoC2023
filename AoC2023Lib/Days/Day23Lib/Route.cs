@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AoC2023Lib.Days.Day23Lib
 {
-    internal class Route
+    public class Route
     {
         public List<Tile> Steps { get; set; } = new();
 

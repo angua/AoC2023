@@ -14,6 +14,11 @@ namespace AoC2023Lib.Days.Day23Lib
         public Vector2 Position { get; set; }
 
         public List<Tile> Neighbors { get; set; } = new();
+        public List<Tile> NeighborsWithoutSlopes { get; set; } = new();
+
+
+        public List<Connection> Connections { get; set; } = new List<Connection>();
+
 
         public Tile(char input)
         {

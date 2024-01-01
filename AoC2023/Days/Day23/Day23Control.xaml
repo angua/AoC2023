@@ -9,6 +9,7 @@
     <Grid>
         <StackPanel>
             <TextBox Text="{Binding LongestPath, Mode=OneWay}" />
+            <TextBox Text="{Binding LongestPathWithoutSlopes, Mode=OneWay}" />
         </StackPanel>
         
     </Grid>

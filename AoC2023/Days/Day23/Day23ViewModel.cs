@@ -14,7 +14,7 @@ public class Day23ViewModel : ViewModelBase
     public long LongestPath { get; set; }
     public long LongestPathWithoutSlopes { get; set; }
 
-    public ObservableCollection<VisualPosition> VisualGrid { get; set; } = new();
+    public ObservableCollection<CommonWPF.Tile> VisualGrid { get; set; } = new();
 
     public int Width => PathFinder.Width;
     public int Height => PathFinder.Height;
@@ -32,10 +32,15 @@ public class Day23ViewModel : ViewModelBase
 
     private void ParseVisuals()
     {
-        var visuals = new ObservableCollection<VisualPosition>();
+        var visuals = new ObservableCollection<CommonWPF.Tile>();
         foreach (var pos in PathFinder.Grid)
         {
-            visuals.Add(new VisualPosition(pos.Value));
+            visuals.Add(new VisualTile()
+            {
+                PositionX = (int)pos.Value.Position.X,
+                PositionY = (int)pos.Value.Position.Y,
+                Ground = pos.Value.Ground,
+            });
         }
         App.Current.Dispatcher.Invoke(() =>
         {

@@ -12,6 +12,7 @@
         <local:PositionConverter x:Key="PositionConverter" />
         <local:GroundTextConverter x:Key="GroundTextConverter" />
         <local:TileColorSelector x:Key="TileColorSelector" />
+        <local:TileLineColorSelector x:Key="TileLineColorSelector" />
     </UserControl.Resources>
 
     <Grid>
@@ -20,13 +21,20 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         
-        <StackPanel Grid.Column="0">
-            <TextBox Text="{Binding LongestPath, Mode=OneWay}" />
-            <TextBox Text="{Binding LongestPathWithoutSlopes, Mode=OneWay}" />
+        <StackPanel Margin="20" Grid.Column="0">
+            <Button Command="{Binding FindLongestPath}" >Find Longest Path</Button>
+            <TextBlock Text="Longest Path Length:" />
+            <TextBox Text="{Binding LongestPathStepsCount, Mode=OneWay}" />
+
+            <Button Command="{Binding FindLongestPathWithoutSlopes}" >FindLongestPath without slopes</Button>
+            <TextBlock Text="Longest Path Length without slopes:" />
+            <TextBox Text="{Binding LongestPathWithoutSlopesStepsCount, Mode=OneWay}" />
         </StackPanel>
 
         <ScrollViewer Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-            <commonwpf:TilesControl Tiles="{Binding VisualGrid}" TileSize="9" TileColorSelector="{StaticResource TileColorSelector}" />
+            <commonwpf:TilesControl Tiles="{Binding VisualGrid}" TileSize="9" TileColorSelector="{StaticResource TileColorSelector}" 
+                                    TileLineColorSelector="{StaticResource TileLineColorSelector}" 
+                                    TileLines="{Binding VisualPathLines}"/>
         </ScrollViewer>
         
     </Grid>

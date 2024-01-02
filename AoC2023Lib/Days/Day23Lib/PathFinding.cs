@@ -168,8 +168,9 @@ public class PathFinding
     }
 
 
-    public long FindLongestPath(bool useSlopes = true)
+    public List<Tile> FindLongestPath(bool useSlopes = true)
     {
+
         var start = Grid.Where(p => p.Key.Y == 0 && p.Value.Ground == '.').First();
         var end = Grid.Where(p => p.Key.Y == _maxY && p.Value.Ground == '.').First();
 
@@ -212,11 +213,12 @@ public class PathFinding
 
         }
 
-        return finalRoutes.Max(r => r.Steps.Count) - 1;
+        var orderedRoutes = finalRoutes.OrderByDescending(r => r.Steps.Count);
+        return orderedRoutes.First().Steps;
     }
 
 
-    public long FindLongestPathWithoutSlopes()
+    public List<Tile> FindLongestPathWithoutSlopes()
     {
         // get connections between crossroads
         FindConnections();
@@ -285,10 +287,28 @@ public class PathFinding
 
         }
 
-        var longestPath = pathsToEnd.Max(p => p.Sum(c => c.Connection.StepCount));
 
-        return longestPath;
+        var orderedPaths = pathsToEnd.OrderByDescending(p => p.Sum(c => c.Connection.StepCount));
 
+        var longestPath = orderedPaths.First();
+
+        // string routes together
+        var steps = longestPath.First().Connection.Path.Steps;
+
+        foreach (var connection in longestPath.Skip(1))
+        {
+            var addedSteps = connection.Connection.Path.Steps;
+            if (connection.Connection.Path.Steps.First() == connection.End)
+            {
+                // need to use backwards
+                addedSteps.Reverse();
+            }
+
+            // skip first step of route, it ts present in both routes
+            steps.AddRange(addedSteps.Skip(1));
+        }
+
+        return steps;
     }
 
     private void FindConnections()

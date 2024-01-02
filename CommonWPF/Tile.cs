@@ -11,8 +11,5 @@ namespace CommonWPF
     {
         public int PositionX {  get; set; }
         public int PositionY {  get; set; }
-
-        public Brush Brush { get; set; }
-
     }
 }

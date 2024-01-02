@@ -228,4 +228,36 @@ public class MathUtils
         new Vector2(-1, 0),
         new Vector2(0, -1)
     };
+
+    /// <summary>
+    /// Return the rasterized line from start to end, including the start / end points themselves.
+    /// </summary>
+    public static IEnumerable<Vector2> GetPointsOnLine(Vector2 start, Vector2 end)
+    {
+        var delta = end - start;
+
+        if (Math.Abs(delta.X) > Math.Abs(delta.Y))
+        {
+            var numSteps = Math.Abs(delta.X);
+            var deltaX = delta.X < 1 ? -1 : 1;
+            for (var i = 0; i < numSteps; ++i)
+            {
+                var yStep = delta.Y / numSteps;
+                yield return new Vector2(start.X + deltaX * i, (int)(start.Y + yStep * i));
+            }
+        }
+        else
+        {
+            var numSteps = Math.Abs(delta.Y);
+            var deltaY = delta.Y < 1 ? -1 : 1;
+            for (var i = 0; i < numSteps; ++i)
+            {
+                var xStep = delta.X / numSteps;
+                yield return new Vector2((int)(start.X + xStep * i), start.Y + deltaY * i);
+            }
+        }
+
+        yield return end;
+    }
+
 }

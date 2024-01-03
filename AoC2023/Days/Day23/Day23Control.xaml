@@ -29,6 +29,9 @@
             <Button Command="{Binding FindLongestPathWithoutSlopes}" >FindLongestPath without slopes</Button>
             <TextBlock Text="Longest Path Length without slopes:" />
             <TextBox Text="{Binding LongestPathWithoutSlopesStepsCount, Mode=OneWay}" />
+
+            <TextBlock Text="took ms" />
+            <TextBlock Text="{Binding ElapsedTime}" />
         </StackPanel>
 
         <ScrollViewer Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">

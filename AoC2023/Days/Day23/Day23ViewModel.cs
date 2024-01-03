@@ -1,18 +1,18 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using Advent2023.Utils;
 using AoC2023Lib.Days.Day23Lib;
 using CommonWPF;
-using Microsoft.VisualBasic;
 
 namespace AoC2023.Days.Day23;
 
 public class Day23ViewModel : ViewModelBase
 {
     private bool _calculationRunning = false;
+    private Stopwatch _watch = new Stopwatch();
+
     public PathFinding PathFinder { get; set; } = new();
 
     private List<AoC2023Lib.Days.Day23Lib.Tile> _longestPath = new();
@@ -35,19 +35,25 @@ public class Day23ViewModel : ViewModelBase
     public int Width => PathFinder.Width;
     public int Height => PathFinder.Height;
 
+    public long ElapsedTime
+    {
+        get => GetValue<long>();
+        set => SetValue(value);
+    }
+
     public Day23ViewModel()
     {
+        _watch.Start();
         var fileData = ResourceUtils.LoadDataFromResource("Day23", "input.txt");
         PathFinder.Parse(fileData);
 
         Task.Run(ParseVisuals);
+        _watch.Stop();
+        ElapsedTime = _watch.ElapsedMilliseconds;
+
 
         FindLongestPath = new RelayCommand(CanFindLongestPath, DoFindLongestPath);
         FindLongestPathWithoutSlopes = new RelayCommand(CanFindLongestPathWithoutSlopes, DoFindLongestPathWithoutSlopes);
-
-
-        //LongestPath = PathFinder.FindLongestPath();
-        // LongestPathWithoutSlopes = PathFinder.FindLongestPathWithoutSlopes();
     }
 
     public RelayCommand FindLongestPath { get; }
@@ -62,6 +68,7 @@ public class Day23ViewModel : ViewModelBase
 
     private async Task StartFindingLongestPath()
     {
+        _watch.Restart();
         _calculationRunning = true;
         _longestPath = PathFinder.FindLongestPath();
         var visualLines = ParseLines(_longestPath);
@@ -73,6 +80,8 @@ public class Day23ViewModel : ViewModelBase
             RaisePropertyChanged(nameof(VisualPathLines));
         });
         _calculationRunning = false;
+        _watch.Stop();
+        ElapsedTime = _watch.ElapsedMilliseconds;
     }
 
     private ObservableCollection<TileLine> ParseLines(List<AoC2023Lib.Days.Day23Lib.Tile> path)
@@ -102,10 +111,11 @@ public class Day23ViewModel : ViewModelBase
     public void DoFindLongestPathWithoutSlopes()
     {
         StartFindingLongestPathWithoutSlopes();
-
     }
     private async Task StartFindingLongestPathWithoutSlopes()
     {
+        _watch.Restart();
+
         _calculationRunning = true;
 
         _longestPathWithoutSlopes = PathFinder.FindLongestPathWithoutSlopes();
@@ -114,10 +124,12 @@ public class Day23ViewModel : ViewModelBase
         App.Current.Dispatcher.Invoke(() =>
         {
             VisualPathLines = visualLines;
-            LongestPathStepsCount = _longestPathWithoutSlopes.Count - 1;
+            LongestPathWithoutSlopesStepsCount = _longestPathWithoutSlopes.Count - 1;
             RaisePropertyChanged(nameof(VisualPathLines));
         });
         _calculationRunning = false;
+        _watch.Stop();
+        ElapsedTime = _watch.ElapsedMilliseconds;
 
     }
 

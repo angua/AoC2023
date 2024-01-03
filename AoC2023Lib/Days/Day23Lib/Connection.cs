@@ -10,7 +10,7 @@ namespace AoC2023Lib.Days.Day23Lib
     {
         public Route Path { get; set; }
 
-        public List<Tile> Crossroads { get; set; } = new List<Tile>();
+        public Tile[] Crossroads { get; set; } = new Tile[2];
 
         public int StepCount { get; set; }
     }

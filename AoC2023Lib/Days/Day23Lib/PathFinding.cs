@@ -361,7 +361,7 @@ public class PathFinding
                         {
                             Path = newRoute,
                             StepCount = newRoute.Steps.Count - 1,
-                            Crossroads = new List<Tile> { currentCrossroad, neighbor }
+                            Crossroads = new[] { currentCrossroad, neighbor }
                         };
                         currentCrossroad.Connections.Add(connection);
                         neighbor.Connections.Add(connection);

@@ -39,6 +39,7 @@
     <None Remove="Resources\Days\Day23\input.txt" />
     <None Remove="Resources\Days\Day24\input.txt" />
     <None Remove="Resources\Days\Day24\test.txt" />
+    <None Remove="Resources\Days\Day25\input.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Days\Day01\calibrationinput.jpg" />
@@ -74,6 +75,7 @@
     <EmbeddedResource Include="Resources\Days\Day23\input.txt" />
     <EmbeddedResource Include="Resources\Days\Day24\test.txt" />
     <EmbeddedResource Include="Resources\Days\Day24\input.txt" />
+    <EmbeddedResource Include="Resources\Days\Day25\input.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AoC2023Lib\AoC2023Lib.csproj" />

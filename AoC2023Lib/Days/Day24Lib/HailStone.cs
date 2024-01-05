@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AoC2023Lib.Days.Day08Lib;
 
 namespace AoC2023Lib.Days.Day24Lib;
 
@@ -10,12 +11,12 @@ public class HailStone
 {
     private string line;
 
-    public long PositionX { get; private set; }
-    public long PositionY { get; private set; }
-    public long PositionZ { get; private set; }
-    public long VelocityX { get; private set; }
-    public long VelocityY { get; private set; }
-    public long VelocityZ { get; private set; }
+    public long PositionX { get; set; }
+    public long PositionY { get; set; }
+    public long PositionZ { get; set; }
+    public long VelocityX { get; set; }
+    public long VelocityY { get; set; }
+    public long VelocityZ { get; set; }
 
     public HailStone(string line)
     {
@@ -33,5 +34,15 @@ public class HailStone
         VelocityX = long.Parse(velocityParts[0].Trim());
         VelocityY = long.Parse(velocityParts[1].Trim());
         VelocityZ = long.Parse(velocityParts[2].Trim());
+    }
+
+    public HailStone(HailStone hailStone)
+    {
+        PositionX = hailStone.PositionX;
+        PositionY = hailStone.PositionY;
+        PositionZ = hailStone.PositionZ;
+        VelocityX = hailStone.VelocityX;
+        VelocityY = hailStone.VelocityY;
+        VelocityZ = hailStone.VelocityZ;
     }
 }

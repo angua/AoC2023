@@ -7,6 +7,29 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.Column="0">
+            <Button Command="{Binding TestNextConnections}">Create Connections for next machine part</Button>
+
+            <Button Command="{Binding FindGroupSizeProduct}">Find Group size product</Button>
+            
+            
+            
+            <TextBox Text="{Binding GroupSizeProduct, Mode=OneWay}" />
+
+            <ListView ItemsSource="{Binding TestedParts}" Height="200">
+                
+            </ListView>
+            
+        </StackPanel>
+
+        <DataGrid Grid.Column="1" ItemsSource="{Binding ConnectionCounts}">
+            
+        </DataGrid>
         
     </Grid>
 </UserControl>

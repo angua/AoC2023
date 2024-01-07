@@ -4,14 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AoC2023.Days.Day17" 
+             xmlns:commonwpf="clr-namespace:CommonWPF;assembly=CommonWPF"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <local:LossColorConverter x:Key="LossColorConverter" />
-        <local:PositionXConverter x:Key="PositionXConverter" />
-        <local:PositionYConverter x:Key="PositionYConverter" />
-        <local:ElementSelector x:Key="ElementSelector" />
+        
+        <local:TileColorSelector x:Key="TileColorSelector" />
+        <local:TileLineColorSelector x:Key="TileLineColorSelector" />
 
         <DataTemplate x:Key="PositionTemplate">
             <Border Height="10" Width="10" Background="{Binding Loss, Converter={StaticResource LossColorConverter}}">
@@ -20,37 +20,25 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0">
-            <TextBox Text="{Binding LowestHeatLoss}" />
-            <TextBox Text="{Binding LowestUltraHeatLoss}" />
+            <Button Command="{Binding GetLowestHeatLoss}">Get lowest heat loss</Button>
+            <TextBox Margin="0,10,0,0" Text="{Binding LowestHeatLoss}" />
+            <TextBlock Margin="0,20,0,0" Text="Use ultra crucibles" />
+            <Button Margin="0,10,0,0" Command="{Binding GetLowestUltraHeatLoss}">Get lowest heat loss</Button>
+            <TextBox Margin="0,10,0,0" Text="{Binding LowestUltraHeatLoss}" />
+            <TextBlock Margin="0,20,0,0" Text="{Binding Timer}" />
         </StackPanel>
 
-        <ScrollViewer Grid.Column="1">
-            <ItemsControl ItemsSource="{Binding HeatLossMap}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas Width="{Binding MapWidth, Converter={StaticResource PositionXConverter}}" Height="{Binding MapHeight, Converter={StaticResource PositionYConverter}}" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <ItemsControl.ItemContainerStyle>
-                    <Style >
-                        <Setter Property="Canvas.Left" Value="{Binding PositionX, Converter={StaticResource PositionXConverter}}" />
-                        <Setter Property="Canvas.Top" Value="{Binding PositionY, Converter={StaticResource PositionYConverter}}" />
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-
-                <ItemsControl.ItemTemplateSelector>
-                    <local:ElementSelector />
-                </ItemsControl.ItemTemplateSelector>
-
-            </ItemsControl>
+        <ScrollViewer Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+            <commonwpf:TilesControl Tiles="{Binding VisualGrid}" TileSize="9" TileColorSelector="{StaticResource TileColorSelector}" 
+                            TileLineColorSelector="{StaticResource TileLineColorSelector}" 
+                            TileLines="{Binding VisualPathLines}"/>
         </ScrollViewer>
 
     </Grid>

@@ -118,7 +118,7 @@ namespace CommonWPF
 
         }
 
-        private void DrawRectangle(int positionX, int positionY, int tileSize, Color color)
+        private void DrawRectangle(int positionX, int positionY, int tileSize, System.Drawing.Color color)
         {
             // start positions on bitmap
             var startX = positionX * tileSize;
@@ -157,7 +157,7 @@ namespace CommonWPF
         }
 
 
-        private void SetPixel(int x, int y, Color color)
+        private void SetPixel(int x, int y, System.Drawing.Color color)
         {
             var bytesPerPixel = (_bitmap.Format.BitsPerPixel + 7) / 8;
             var stride = _bitmap.PixelWidth * bytesPerPixel;

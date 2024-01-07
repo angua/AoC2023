@@ -180,45 +180,11 @@ public class MathUtils
 
     public static Vector2 TurnRight(Vector2 input)
     {
-        if (input == new Vector2(0, -1))
-        {
-            return new Vector2(1, 0);
-        }
-        if (input == new Vector2(1, 0))
-        {
-            return new Vector2(0, 1);
-        }
-        if (input == new Vector2(0, 1))
-        {
-            return new Vector2(-1, 0);
-        }
-        if (input == new Vector2(-1, 0))
-        {
-            return new Vector2(0, -1);
-        }
-        return new Vector2(0, 0);
+        return new Vector2(-input.Y, input.X);
     }
-
-
     public static Vector2 TurnLeft(Vector2 input)
     {
-        if (input == new Vector2(0, -1))
-        {
-            return new Vector2(-1, 0);
-        }
-        if (input == new Vector2(-1, 0))
-        {
-            return new Vector2(0, 1);
-        }
-        if (input == new Vector2(0, 1))
-        {
-            return new Vector2(1, 0);
-        }
-        if (input == new Vector2(1, 0))
-        {
-            return new Vector2(0, -1);
-        }
-        return new Vector2(0, 0);
+        return new Vector2(input.Y, -input.X);
     }
 
     public static List<Vector2> OrthogonalDirections => new List<Vector2>()

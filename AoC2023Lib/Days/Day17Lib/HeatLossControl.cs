@@ -31,21 +31,11 @@ public class HeatLossControl
         _maxY = (int)Grid.Max(p => p.Key.Y);
     }
 
-    public int GetLowestHeatLoss()
-    {
-        BestMove = GetLowestHeatLossMove();
-        return BestMove.Loss;
-    }
-
-    public int GetLowestUltraHeatLoss()
-    {
-        BestUltraMove = GetLowestHeatLossMove(true);
-        return BestUltraMove.Loss;
-    }
-
+   
     public Move GetLowestHeatLossMove(bool useUltra = false)
     {
-        var availableMoves = new List<Move>();
+        // <loss, move>
+        var availableMoves = new SortedDictionary<int, List<Move>>();
 
         var gridData = new Dictionary<Vector2, PositionData>();
 
@@ -72,15 +62,22 @@ public class HeatLossControl
                     startPos,
                 }
             };
-            availableMoves.Add(possibleMove);
+
+            AddMove(availableMoves, possibleMove);
         }
 
         // go through available moves
-        while (availableMoves.Count > 0)
+        while (availableMoves.Any()) 
         {
+            var minLossMoves = availableMoves.First();
             // move with lowest loss
-            var currentMove = availableMoves.OrderBy(m => m.Loss).FirstOrDefault();
-            availableMoves.Remove(currentMove);
+            
+            var currentMove = minLossMoves.Value.First();
+            minLossMoves.Value.Remove(currentMove);
+            if (minLossMoves.Value.Count == 0)
+            {
+                availableMoves.Remove(minLossMoves.Key);
+            }
 
             var currentPosition = currentMove.EndPosition;
             if (!gridData.TryGetValue(currentPosition, out var currentTileData))
@@ -127,7 +124,7 @@ public class HeatLossControl
                     possibleMove.Route = new List<Vector2>(currentMove.Route);
                     possibleMove.Route.Add(currentPosition);
 
-                    availableMoves.Add(possibleMove);
+                    AddMove(availableMoves, possibleMove);
 
                     if (newPos == endPos)
                     {
@@ -144,6 +141,17 @@ public class HeatLossControl
         }
 
         return null;
+    }
+
+    private void AddMove(IDictionary<int, List<Move>> dictionary, Move move)
+    {
+        var loss = move.Loss;
+        if (!dictionary.TryGetValue(loss, out var moves))
+        {
+            moves = new List<Move>();
+            dictionary[loss] = moves;
+        }
+        moves.Add(move);
     }
 
 
@@ -165,12 +173,12 @@ public class HeatLossControl
             {
                 directions.Add(new MoveDirection()
                 {
-                    Direction = TurnRight(currentMove.Direction),
+                    Direction = MathUtils.TurnRight(currentMove.Direction),
                     StraightCount = 1
                 });
                 directions.Add(new MoveDirection()
                 {
-                    Direction = TurnLeft(currentMove.Direction),
+                    Direction = MathUtils.TurnLeft(currentMove.Direction),
                     StraightCount = 1
                 });
             }
@@ -179,12 +187,12 @@ public class HeatLossControl
         {
             directions.Add(new MoveDirection()
             {
-                Direction = TurnRight(currentMove.Direction),
+                Direction = MathUtils.TurnRight(currentMove.Direction),
                 StraightCount = 1
             });
             directions.Add(new MoveDirection()
             {
-                Direction = TurnLeft(currentMove.Direction),
+                Direction = MathUtils.TurnLeft(currentMove.Direction),
                 StraightCount = 1
             });
             if (currentMove.StraightCount < 3)
@@ -198,57 +206,6 @@ public class HeatLossControl
         }
 
         return directions;
-    }
-
-    private Vector2 TurnRight(Vector2 input)
-    {
-        if (input == new Vector2(0, -1))
-        {
-            return new Vector2(1, 0);
-        }
-
-        if (input == new Vector2(1, 0))
-        {
-            return new Vector2(0, 1);
-        }
-
-        if (input == new Vector2(0, 1))
-        {
-            return new Vector2(-1, 0);
-        }
-
-        if (input == new Vector2(-1, 0))
-        {
-            return new Vector2(0, -1);
-        }
-
-        return new Vector2(0, 0);
-    }
-
-
-    private Vector2 TurnLeft(Vector2 input)
-    {
-        if (input == new Vector2(0, -1))
-        {
-            return new Vector2(-1, 0);
-        }
-
-        if (input == new Vector2(-1, 0))
-        {
-            return new Vector2(0, 1);
-        }
-
-        if (input == new Vector2(0, 1))
-        {
-            return new Vector2(1, 0);
-        }
-
-        if (input == new Vector2(1, 0))
-        {
-            return new Vector2(0, -1);
-        }
-
-        return new Vector2(0, 0);
     }
 
 }

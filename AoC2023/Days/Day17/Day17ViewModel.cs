@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -12,16 +11,13 @@ namespace AoC2023.Days.Day17;
 
 public class Day17ViewModel : ViewModelBase
 {
-    public HeatLossControl Control { get; } = new();
+    public HeatLossMap HeatLoss { get; } = new();
 
-    public ObservableCollection<object> HeatLossMap { get; set; } = new();
+    public ObservableCollection<Tile> VisualGrid { get; set; } = new();
+    public ObservableCollection<TileLine> VisualPathLines { get; set; } = new();
 
-    public ObservableCollection<CommonWPF.Tile> VisualGrid { get; set; } = new();
-    public ObservableCollection<CommonWPF.TileLine> VisualPathLines { get; set; } = new();
-
-
-    public int MapWidth => Control.CountX;
-    public int MapHeight => Control.CountY;
+    public int MapWidth => HeatLoss.CountX;
+    public int MapHeight => HeatLoss.CountY;
 
 
     public Move BestMove
@@ -46,7 +42,6 @@ public class Day17ViewModel : ViewModelBase
         set => SetValue(value);
     }
 
-
     private Stopwatch _watch = new Stopwatch();
     public long Timer
     {
@@ -59,14 +54,12 @@ public class Day17ViewModel : ViewModelBase
     public Day17ViewModel()
     {
         var fileData = ResourceUtils.LoadDataFromResource("Day17", "input.txt");
-        Control.Parse(fileData);
+        HeatLoss.Parse(fileData);
 
-        Task.Run(ParseVisuals);
+        Task.Run(ParseMap);
 
         GetLowestHeatLoss = new RelayCommand(CanGetLowestHeatLoss, DoGetLowestHeatLoss);
         GetLowestUltraHeatLoss = new RelayCommand(CanGetLowestUltraHeatLoss, DoGetLowestUltraHeatLoss);
-
-
     }
 
     public RelayCommand GetLowestHeatLoss { get; }
@@ -81,24 +74,25 @@ public class Day17ViewModel : ViewModelBase
 
     public async Task StartGetLowestHeatLoss()
     {
+        _calculating = true;
         _watch.Reset();
         _watch.Start();
-        _calculating = true;
 
-        BestMove = await Task.Run(() => Control.GetLowestHeatLossMove());
+        BestMove = await Task.Run(() => HeatLoss.GetLowestHeatLossMove());
         LowestHeatLoss = BestMove.Loss;
 
-        var visualLines = ParseLines(BestMove.Route);
+        _watch.Stop();
+        Timer = _watch.ElapsedMilliseconds;
+        _calculating = false;
 
+        var visualLines = ParseLines(BestMove.Route);
         App.Current.Dispatcher.Invoke(() =>
         {
             VisualPathLines = visualLines;
             RaisePropertyChanged(nameof(VisualPathLines));
         });
-
-        _calculating = false;
-        _watch.Stop();
-        Timer = _watch.ElapsedMilliseconds;
+        GetLowestHeatLoss.RaiseCanExecuteChanged();
+        GetLowestUltraHeatLoss.RaiseCanExecuteChanged();
     }
 
 
@@ -113,32 +107,34 @@ public class Day17ViewModel : ViewModelBase
     }
     public async Task StartGetLowestUltraHeatLoss()
     {
+        _calculating = true;
         _watch.Reset();
         _watch.Start();
-        _calculating = true;
         
-        BestUltraMove = await Task.Run(() => Control.GetLowestHeatLossMove(true));
+        BestUltraMove = await Task.Run(() => HeatLoss.GetLowestHeatLossMove(true));
         LowestUltraHeatLoss = BestUltraMove.Loss;
 
-        var visualLines = ParseLines(BestUltraMove.Route);
+        _watch.Stop();
+        Timer = _watch.ElapsedMilliseconds;
+        _calculating = false;
 
+        var visualLines = ParseLines(BestUltraMove.Route);
         App.Current.Dispatcher.Invoke(() =>
         {
             VisualPathLines = visualLines;
             RaisePropertyChanged(nameof(VisualPathLines));
         });
+        GetLowestHeatLoss.RaiseCanExecuteChanged();
+        GetLowestUltraHeatLoss.RaiseCanExecuteChanged();
 
-        _calculating = false;
-        _watch.Stop();
-        Timer = _watch.ElapsedMilliseconds;
     }
 
-    
 
-    private void ParseVisuals()
+
+    private void ParseMap()
     {
         var visuals = new ObservableCollection<Tile>();
-        foreach (var pos in Control.Grid)
+        foreach (var pos in HeatLoss.Grid)
         {
             visuals.Add(new VisualTile()
             {
@@ -156,7 +152,6 @@ public class Day17ViewModel : ViewModelBase
 
     private ObservableCollection<TileLine> ParseLines(List<Vector2> route)
     {
-        
         var visualLines = new ObservableCollection<TileLine>();
         for (int i = 0; i < route.Count - 1; i++)
         {

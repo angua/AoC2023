@@ -9,9 +9,11 @@ namespace AoC2023.Days.Day17
 
         public TileColorSelector()
         {
-            _colours.AddToColourMappings(1, "#FF0000");
-            _colours.AddToColourMappings(5, "#FFFF00");
-            _colours.AddToColourMappings(9, "#00FF00");
+            _colours.AddToColourMappings(1, "#AA0000");
+            _colours.AddToColourMappings(3, "#FF0000");
+            _colours.AddToColourMappings(5, "#FFAA00");
+            _colours.AddToColourMappings(7, "#FFFF00");
+            _colours.AddToColourMappings(9, "#FFFFAA"); 
         }
         public Color GetColorForTile(Tile tile)
         {

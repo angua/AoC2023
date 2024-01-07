@@ -7,6 +7,6 @@ internal class TileLineColorSelector : ITileLineColorSelector
 {
     public Color GetColorForTileLine(TileLine tileLine)
     {
-        return Color.FromArgb(0, 0, 0);
+        return Color.FromArgb(0, 0, 255);
     }
 }

@@ -3,7 +3,7 @@ using Common;
 
 namespace AoC2023Lib.Days.Day17Lib;
 
-public class HeatLossControl
+public class HeatLossMap
 {
     public Dictionary<Vector2, int> Grid { get; private set; } = new();
 

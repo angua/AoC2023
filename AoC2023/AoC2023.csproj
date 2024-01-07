@@ -26,6 +26,7 @@
     <None Remove="Resources\Days\Day13\input.txt" />
     <None Remove="Resources\Days\Day15\input.txt" />
     <None Remove="Resources\Days\Day16\input.txt" />
+    <None Remove="Resources\Days\Day17\heatmap.jpg" />
     <None Remove="Resources\Days\Day17\input.txt" />
     <None Remove="Resources\Days\Day17\test.txt" />
     <None Remove="Resources\Days\Day18\input.txt" />
@@ -62,6 +63,7 @@
     <EmbeddedResource Include="Resources\Days\Day13\input.txt" />
     <EmbeddedResource Include="Resources\Days\Day15\input.txt" />
     <EmbeddedResource Include="Resources\Days\Day16\input.txt" />
+    <EmbeddedResource Include="Resources\Days\Day17\heatmap.jpg" />
     <EmbeddedResource Include="Resources\Days\Day17\test.txt" />
     <EmbeddedResource Include="Resources\Days\Day17\input.txt" />
     <EmbeddedResource Include="Resources\Days\Day18\input.txt" />

@@ -62,7 +62,6 @@ public class HeatLossMap
                     startPos,
                 }
             };
-
             AddMove(availableMoves, possibleMove);
         }
 

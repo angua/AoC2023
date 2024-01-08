@@ -15,6 +15,7 @@ namespace AoC2023.Days.Day17
             _colours.AddToColourMappings(7, "#FFFF00");
             _colours.AddToColourMappings(9, "#FFFFAA"); 
         }
+
         public Color GetColorForTile(Tile tile)
         {
             if (tile is not VisualTile visualTile)
@@ -22,9 +23,7 @@ namespace AoC2023.Days.Day17
                 return Color.FromArgb(0, 0, 0);
             }
             return ColorTranslator.FromHtml(_colours.GetColour(visualTile.HeatLoss));
-            
         }
-
-        
     }
+
 }

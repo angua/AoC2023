@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Numerics;
 using System.Threading.Tasks;
 using Advent2023.Utils;
 using AoC2023Lib.Days.Day17Lib;
@@ -53,13 +51,13 @@ public class Day17ViewModel : ViewModelBase
 
     public Day17ViewModel()
     {
+        GetLowestHeatLoss = new RelayCommand(CanGetLowestHeatLoss, DoGetLowestHeatLoss);
+        GetLowestUltraHeatLoss = new RelayCommand(CanGetLowestUltraHeatLoss, DoGetLowestUltraHeatLoss);
+
         var fileData = ResourceUtils.LoadDataFromResource("Day17", "input.txt");
         HeatLoss.Parse(fileData);
 
         Task.Run(ParseMap);
-
-        GetLowestHeatLoss = new RelayCommand(CanGetLowestHeatLoss, DoGetLowestHeatLoss);
-        GetLowestUltraHeatLoss = new RelayCommand(CanGetLowestUltraHeatLoss, DoGetLowestUltraHeatLoss);
     }
 
     public RelayCommand GetLowestHeatLoss { get; }
@@ -119,8 +117,6 @@ public class Day17ViewModel : ViewModelBase
         GetLowestHeatLoss.RaiseCanExecuteChanged();
         GetLowestUltraHeatLoss.RaiseCanExecuteChanged();
     }
-
-
 
     private void ParseMap()
     {

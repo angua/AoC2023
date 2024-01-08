@@ -101,23 +101,19 @@ public class HeatLossMap
         {
             if (currentMove.StraightCount < 4)
             {
-                // 3 moves straight check ahead
-                for (int i = 1; i < 4 - currentMove.StraightCount; i++)
+                // 4 moves straight check ahead
+                // check if last position inside grid
+                var newPos = currentMove.EndPosition + currentMove.StraightCount * currentMove.Direction;
+                if (!Grid.ContainsKey(newPos))
                 {
-                    // check if position inside grid
-                    var newPos = currentMove.EndPosition + i * currentMove.Direction;
-                    if (!Grid.ContainsKey(newPos))
-                    {
-                        // cannot move 4 times in a straight row, cannot continue from here
-                        // return empty list
-                        return new List<Move>();
-                    }
+                    // cannot move 4 times in a straight row, cannot continue from here
+                    // return empty list
+                    return new List<Move>();
                 }
-
             }
             else
             {
-                // current move is now straight count >= 4
+                // straight count >= 4
                 // turn left and right
                 directions.Add(MathUtils.TurnRight(currentMove.Direction));
                 directions.Add(MathUtils.TurnLeft(currentMove.Direction));
@@ -134,7 +130,6 @@ public class HeatLossMap
             // turn left and right
             directions.Add(MathUtils.TurnRight(currentMove.Direction));
             directions.Add(MathUtils.TurnLeft(currentMove.Direction));
-
 
             // if straight count < 3 also keep moving in the same direction
             if (currentMove.StraightCount < 3)
@@ -234,7 +229,6 @@ public class HeatLossMap
         movesInDir.Add(move);
     }
 
-
     private void AddMove(IDictionary<int, List<Move>> dictionary, Move move)
     {
         var loss = move.Loss;
@@ -246,19 +240,19 @@ public class HeatLossMap
         moves.Add(move);
     }
 
-
-
     public List<Vector2> GetRoute(Move? move)
     {
-        var reversePositions = new List<Vector2>();
-        reversePositions.Add(move.EndPosition);
+        // move back from the final move over the chain of previous moves
+        var reversePositions = new List<Vector2>
+        {
+            move.EndPosition
+        };
 
         while (move != null)
         {
             reversePositions.Add(move.StartPosition);
             move = move.PreviousMove;
         }
-
         reversePositions.Reverse();
         return reversePositions;
     }

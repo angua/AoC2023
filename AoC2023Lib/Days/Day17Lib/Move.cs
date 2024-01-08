@@ -11,5 +11,4 @@ public class Move
     public int Loss {  get; set; }
 
     public Move? PreviousMove { get; set; }
-
 }

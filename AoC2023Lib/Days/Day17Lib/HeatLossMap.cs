@@ -53,15 +53,11 @@ public class HeatLossMap
         {
             var possibleMove = new Move()
             {
+                StartPosition = startPos,
                 EndPosition = startPos + dir,
                 Direction = dir,
                 StraightCount = 1,
                 Loss = Grid[startPos + dir],
-                Route = new List<Vector2>
-                {
-                    startPos,
-                    startPos + dir
-                }
             };
             AddMove(availableMoves, possibleMove);
         }
@@ -188,13 +184,14 @@ public class HeatLossMap
         {
             var possibleMove = new Move()
             {
+                StartPosition = currentMove.EndPosition,
                 EndPosition = newPos,
                 Direction = direction,
                 StraightCount = straightCount,
-                Loss = currentMove.Loss + newLoss
+                Loss = currentMove.Loss + newLoss,
+                PreviousMove = currentMove,
             };
-            possibleMove.Route = new List<Vector2>(currentMove.Route);
-            possibleMove.Route.Add(newPos);
+            
 
             return possibleMove;
         }
@@ -205,8 +202,8 @@ public class HeatLossMap
     {
         if (!gridData.TryGetValue(currentMove.EndPosition, out var tileData))
         {
-            tileData = new PositionData();
-            gridData[currentMove.EndPosition] = tileData;
+            // no data, this must be first and therefore best move
+            return true;
         }
 
         if (!tileData.Moves.TryGetValue(currentMove.Direction, out var movesInDir))
@@ -264,57 +261,20 @@ public class HeatLossMap
     }
 
 
-    private List<MoveDirection> GetMoveDirections(Move currentMove, bool useUltra)
+
+    public List<Vector2> GetRoute(Move? move)
     {
-        var directions = new List<MoveDirection>();
+        var reversePositions = new List<Vector2>();
+        reversePositions.Add(move.EndPosition);
 
-        if (useUltra)
+        while (move != null)
         {
-            if (currentMove.StraightCount < 10)
-            {
-                directions.Add(new MoveDirection()
-                {
-                    Direction = currentMove.Direction,
-                    StraightCount = currentMove.StraightCount + 1
-                });
-            }
-            if (currentMove.StraightCount >= 4)
-            {
-                directions.Add(new MoveDirection()
-                {
-                    Direction = MathUtils.TurnRight(currentMove.Direction),
-                    StraightCount = 1
-                });
-                directions.Add(new MoveDirection()
-                {
-                    Direction = MathUtils.TurnLeft(currentMove.Direction),
-                    StraightCount = 1
-                });
-            }
-        }
-        else
-        {
-            directions.Add(new MoveDirection()
-            {
-                Direction = MathUtils.TurnRight(currentMove.Direction),
-                StraightCount = 1
-            });
-            directions.Add(new MoveDirection()
-            {
-                Direction = MathUtils.TurnLeft(currentMove.Direction),
-                StraightCount = 1
-            });
-            if (currentMove.StraightCount < 3)
-            {
-                directions.Add(new MoveDirection()
-                {
-                    Direction = currentMove.Direction,
-                    StraightCount = currentMove.StraightCount + 1
-                });
-            }
+            reversePositions.Add(move.StartPosition);
+            move = move.PreviousMove;
         }
 
-        return directions;
+        reversePositions.Reverse();
+        return reversePositions;
     }
 
 }

@@ -85,12 +85,8 @@ public class Day17ViewModel : ViewModelBase
         Timer = _watch.ElapsedMilliseconds;
         _calculating = false;
 
-        var visualLines = ParseLines(BestMove.Route);
-        App.Current.Dispatcher.Invoke(() =>
-        {
-            VisualPathLines = visualLines;
-            RaisePropertyChanged(nameof(VisualPathLines));
-        });
+        ParseLines(BestMove);
+
         GetLowestHeatLoss.RaiseCanExecuteChanged();
         GetLowestUltraHeatLoss.RaiseCanExecuteChanged();
     }
@@ -118,15 +114,10 @@ public class Day17ViewModel : ViewModelBase
         Timer = _watch.ElapsedMilliseconds;
         _calculating = false;
 
-        var visualLines = ParseLines(BestUltraMove.Route);
-        App.Current.Dispatcher.Invoke(() =>
-        {
-            VisualPathLines = visualLines;
-            RaisePropertyChanged(nameof(VisualPathLines));
-        });
+        ParseLines(BestUltraMove);
+
         GetLowestHeatLoss.RaiseCanExecuteChanged();
         GetLowestUltraHeatLoss.RaiseCanExecuteChanged();
-
     }
 
 
@@ -150,8 +141,10 @@ public class Day17ViewModel : ViewModelBase
         });
     }
 
-    private ObservableCollection<TileLine> ParseLines(List<Vector2> route)
+    private void ParseLines(Move move)
     {
+        var route = HeatLoss.GetRoute(move);
+
         var visualLines = new ObservableCollection<TileLine>();
         for (int i = 0; i < route.Count - 1; i++)
         {
@@ -166,6 +159,10 @@ public class Day17ViewModel : ViewModelBase
             });
         }
 
-        return visualLines;
+        App.Current.Dispatcher.Invoke(() =>
+        {
+            VisualPathLines = visualLines;
+            RaisePropertyChanged(nameof(VisualPathLines));
+        });
     }
 }

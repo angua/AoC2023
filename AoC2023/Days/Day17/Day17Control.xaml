@@ -19,7 +19,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="20">
+    <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
@@ -27,19 +27,20 @@
 
         <StackPanel Grid.Column="0">
             <TextBlock  Text="Normal crucible" />
-            <Button Margin="0,5,0,0" Command="{Binding GetLowestHeatLoss}">Lowest heat loss</Button>
+            <Button Padding="5" Margin="0,5,0,0" Command="{Binding GetLowestHeatLoss}">Lowest heat loss</Button>
             <TextBox Margin="0,5,0,0" Text="{Binding LowestHeatLoss}" />
-            <TextBlock Margin="0,20,0,0" Text="Use ultra crucibles" />
-            <Button Margin="0,5,0,0" Command="{Binding GetLowestUltraHeatLoss}">Get lowest heat loss</Button>
+            <TextBlock Margin="0,20,0,0" Text="Ultra crucible" />
+            <Button Padding="5" Margin="0,5,0,0" Command="{Binding GetLowestUltraHeatLoss}">Lowest heat loss</Button>
             <TextBox Margin="0,5,0,0" Text="{Binding LowestUltraHeatLoss}" />
+            
+            <TextBlock Margin="0,20,0,0"  Text="Calculation time: " />
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Calculation time: " />
-                <TextBlock Margin="0,20,0,0" Text="{Binding Timer}" />
+                <TextBlock Text="{Binding Timer}" />
                 <TextBlock Text=" ms" />
             </StackPanel>
         </StackPanel>
 
-        <ScrollViewer Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+        <ScrollViewer Margin="20,0,0,0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <commonwpf:TilesControl Tiles="{Binding VisualGrid}" TileSize="9" TileColorSelector="{StaticResource TileColorSelector}" 
                             TileLineColorSelector="{StaticResource TileLineColorSelector}" 
                             TileLines="{Binding VisualPathLines}"/>

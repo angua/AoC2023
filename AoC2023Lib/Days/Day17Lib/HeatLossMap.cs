@@ -101,42 +101,27 @@ public class HeatLossMap
         {
             if (currentMove.StraightCount < 4)
             {
-                var straightmoves = new List<Move>();
-                // 3 moves straight
-                while (currentMove.StraightCount < 4)
+                // 3 moves straight check ahead
+                for (int i = 1; i < 4 - currentMove.StraightCount; i++)
                 {
-                    var direction = currentMove.Direction;
-                    var possibleMove = CreateMove(currentMove, direction);
-                    if (possibleMove != null)
-                    {
-                        if (!IsBestLoss(possibleMove, gridData, useUltra))
-                        {
-                            // already better move at this position, don't continue from here
-                            return new List<Move>();
-                        }
-                        straightmoves.Add(possibleMove);
-
-                        // move to next position
-                        currentMove = possibleMove;
-                    }
-                    else
+                    // check if position inside grid
+                    var newPos = currentMove.EndPosition + i * currentMove.Direction;
+                    if (!Grid.ContainsKey(newPos))
                     {
                         // cannot move 4 times in a straight row, cannot continue from here
                         // return empty list
                         return new List<Move>();
                     }
                 }
-                // when we arrive here, we have moved 4 allowed straight moves
-                foreach (var move in straightmoves)
-                {
-                    AddToGridData(move, gridData);
-                }
-            }
 
-            // current move is now straight count >= 4
-            // turn left and right
-            directions.Add(MathUtils.TurnRight(currentMove.Direction));
-            directions.Add(MathUtils.TurnLeft(currentMove.Direction));
+            }
+            else
+            {
+                // current move is now straight count >= 4
+                // turn left and right
+                directions.Add(MathUtils.TurnRight(currentMove.Direction));
+                directions.Add(MathUtils.TurnLeft(currentMove.Direction));
+            }
 
             // if straight count < 10 also keep moving in the same direction
             if (currentMove.StraightCount < 10)
@@ -149,6 +134,7 @@ public class HeatLossMap
             // turn left and right
             directions.Add(MathUtils.TurnRight(currentMove.Direction));
             directions.Add(MathUtils.TurnLeft(currentMove.Direction));
+
 
             // if straight count < 3 also keep moving in the same direction
             if (currentMove.StraightCount < 3)
@@ -191,7 +177,7 @@ public class HeatLossMap
                 Loss = currentMove.Loss + newLoss,
                 PreviousMove = currentMove,
             };
-            
+
 
             return possibleMove;
         }

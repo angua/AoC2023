@@ -31,7 +31,7 @@ public class HeatLossMap
         _maxY = (int)Grid.Max(p => p.Key.Y);
     }
 
-   
+
     public Move GetLowestHeatLossMove(bool useUltra = false)
     {
         // <loss, move>
@@ -39,10 +39,10 @@ public class HeatLossMap
 
         var gridData = new Dictionary<Vector2, PositionData>();
 
-        // starting moves
         var startPos = new Vector2(0, 0);
         var endPos = new Vector2(_maxX, _maxY);
 
+        // starting moves
         var possibleDirections = new List<Vector2>()
         {
             new Vector2(1, 0),
@@ -60,17 +60,17 @@ public class HeatLossMap
                 Route = new List<Vector2>
                 {
                     startPos,
+                    startPos + dir
                 }
             };
             AddMove(availableMoves, possibleMove);
         }
 
         // go through available moves
-        while (availableMoves.Any()) 
+        while (availableMoves.Any())
         {
+            // choose available move with lowest loss
             var minLossMoves = availableMoves.First();
-            // move with lowest loss
-            
             var currentMove = minLossMoves.Value.First();
             minLossMoves.Value.Remove(currentMove);
             if (minLossMoves.Value.Count == 0)
@@ -78,69 +78,179 @@ public class HeatLossMap
                 availableMoves.Remove(minLossMoves.Key);
             }
 
-            var currentPosition = currentMove.EndPosition;
-            if (!gridData.TryGetValue(currentPosition, out var currentTileData))
+            foreach (var possibleMove in GetPossibleMoves(currentMove, gridData, useUltra))
             {
-                currentTileData = new PositionData();
-                gridData[currentPosition] = currentTileData;
-            }
+                AddMove(availableMoves, possibleMove);
 
-            var movesInDir = currentTileData.Moves.Where(m => m.Direction == currentMove.Direction);
-            if (!useUltra)
-            {
-                // we've reached this before from this direction with lower loss and lower or equal remaining stright steps
-                if (movesInDir.Any(m => m.Loss <= currentMove.Loss && m.StraightCount <= currentMove.StraightCount))
+                if (possibleMove.EndPosition == endPos)
                 {
-                    // disregard this move
-                    continue;
-                }
-            }
-            else
-            {
-                if (movesInDir.Any(m => m.Loss <= currentMove.Loss && m.StraightCount == currentMove.StraightCount))
-                {
-                    // disregard this move
-                    continue;
-                }
-            }
-
-            // otherwise add to moves on this tile data
-            currentTileData.Moves.Add(currentMove);
-
-            foreach (var moveDirection in GetMoveDirections(currentMove, useUltra))
-            {
-                var newPos = currentPosition + moveDirection.Direction;
-
-                if (Grid.TryGetValue(newPos, out var newLoss))
-                {
-                    var possibleMove = new Move()
+                    // we have found the destination!
+                    if (!useUltra || useUltra && possibleMove.StraightCount >= 4)
                     {
-                        EndPosition = newPos,
-                        Direction = moveDirection.Direction,
-                        StraightCount = moveDirection.StraightCount,
-                        Loss = currentMove.Loss + newLoss
-                    };
-                    possibleMove.Route = new List<Vector2>(currentMove.Route);
-                    possibleMove.Route.Add(currentPosition);
-
-                    AddMove(availableMoves, possibleMove);
-
-                    if (newPos == endPos)
-                    {
-                        // we have found the destination!
-                        if (!useUltra || useUltra && possibleMove.StraightCount >= 4)
-                        {
-                            return possibleMove;
-                        }
+                        return possibleMove;
                     }
-
                 }
             }
-
         }
 
         return null;
     }
+
+    private IEnumerable<Move> GetPossibleMoves(Move currentMove, Dictionary<Vector2, PositionData> gridData, bool useUltra)
+    {
+        var directions = new List<Vector2>();
+        var possibleMoves = new List<Move>();
+
+        if (useUltra)
+        {
+            if (currentMove.StraightCount < 4)
+            {
+                var straightmoves = new List<Move>();
+                // 3 moves straight
+                while (currentMove.StraightCount < 4)
+                {
+                    var direction = currentMove.Direction;
+                    var possibleMove = CreateMove(currentMove, direction);
+                    if (possibleMove != null)
+                    {
+                        if (!IsBestLoss(possibleMove, gridData, useUltra))
+                        {
+                            // already better move at this position, don't continue from here
+                            return new List<Move>();
+                        }
+                        straightmoves.Add(possibleMove);
+
+                        // move to next position
+                        currentMove = possibleMove;
+                    }
+                    else
+                    {
+                        // cannot move 4 times in a straight row, cannot continue from here
+                        // return empty list
+                        return new List<Move>();
+                    }
+                }
+                // when we arrive here, we have moved 4 allowed straight moves
+                foreach (var move in straightmoves)
+                {
+                    AddToGridData(move, gridData);
+                }
+            }
+
+            // current move is now straight count >= 4
+            // turn left and right
+            directions.Add(MathUtils.TurnRight(currentMove.Direction));
+            directions.Add(MathUtils.TurnLeft(currentMove.Direction));
+
+            // if straight count < 10 also keep moving in the same direction
+            if (currentMove.StraightCount < 10)
+            {
+                directions.Add(currentMove.Direction);
+            }
+        }
+        else
+        {
+            // turn left and right
+            directions.Add(MathUtils.TurnRight(currentMove.Direction));
+            directions.Add(MathUtils.TurnLeft(currentMove.Direction));
+
+            // if straight count < 3 also keep moving in the same direction
+            if (currentMove.StraightCount < 3)
+            {
+                directions.Add(currentMove.Direction);
+            }
+        }
+
+        foreach (var direction in directions)
+        {
+            var possibleMove = CreateMove(currentMove, direction);
+            if (possibleMove != null)
+            {
+                if (IsBestLoss(possibleMove, gridData, useUltra))
+                {
+                    // best move for this position
+                    possibleMoves.Add(possibleMove);
+                    AddToGridData(possibleMove, gridData);
+                }
+            }
+        }
+
+        return possibleMoves;
+    }
+
+    private Move? CreateMove(Move currentMove, Vector2 direction)
+    {
+        var newPos = currentMove.EndPosition + direction;
+
+        var straightCount = currentMove.Direction == direction ? currentMove.StraightCount + 1 : 1;
+
+        if (Grid.TryGetValue(newPos, out var newLoss))
+        {
+            var possibleMove = new Move()
+            {
+                EndPosition = newPos,
+                Direction = direction,
+                StraightCount = straightCount,
+                Loss = currentMove.Loss + newLoss
+            };
+            possibleMove.Route = new List<Vector2>(currentMove.Route);
+            possibleMove.Route.Add(newPos);
+
+            return possibleMove;
+        }
+        return null;
+    }
+
+    private bool IsBestLoss(Move currentMove, Dictionary<Vector2, PositionData> gridData, bool useUltra)
+    {
+        if (!gridData.TryGetValue(currentMove.EndPosition, out var tileData))
+        {
+            tileData = new PositionData();
+            gridData[currentMove.EndPosition] = tileData;
+        }
+
+        if (!tileData.Moves.TryGetValue(currentMove.Direction, out var movesInDir))
+        {
+            // no data, this must be first and therefore best move
+            return true;
+        }
+
+        if (!useUltra)
+        {
+            // we've reached this before from this direction with lower loss and lower or equal remaining stright steps
+            if (movesInDir.Any(m => m.Loss <= currentMove.Loss && m.StraightCount <= currentMove.StraightCount))
+            {
+                // disregard this move
+                return false;
+            }
+        }
+        else
+        {
+            if (movesInDir.Any(m => m.Loss <= currentMove.Loss && m.StraightCount == currentMove.StraightCount))
+            {
+                // disregard this move
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void AddToGridData(Move move, Dictionary<Vector2, PositionData> gridData)
+    {
+        if (!gridData.TryGetValue(move.EndPosition, out var tileData))
+        {
+            tileData = new PositionData();
+            gridData[move.EndPosition] = tileData;
+        }
+
+        if (!tileData.Moves.TryGetValue(move.Direction, out var movesInDir))
+        {
+            movesInDir = new List<Move>();
+            tileData.Moves[move.Direction] = movesInDir;
+        }
+        movesInDir.Add(move);
+    }
+
 
     private void AddMove(IDictionary<int, List<Move>> dictionary, Move move)
     {

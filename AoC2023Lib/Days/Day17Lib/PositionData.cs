@@ -1,7 +1,9 @@
-﻿namespace AoC2023Lib.Days.Day17Lib;
+﻿using System.Numerics;
+
+namespace AoC2023Lib.Days.Day17Lib;
 
 public class PositionData
 {
-    // <direction, straight count, loss>
-    public List<Move> Moves = new();
+    // <direction, moves in this direction>
+    public Dictionary<Vector2, List<Move>> Moves = new();
 }

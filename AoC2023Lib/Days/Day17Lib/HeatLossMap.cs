@@ -103,7 +103,7 @@ public class HeatLossMap
             {
                 // 4 moves straight check ahead
                 // check if last position inside grid
-                var newPos = currentMove.EndPosition + currentMove.StraightCount * currentMove.Direction;
+                var newPos = currentMove.EndPosition + (4 - currentMove.StraightCount) * currentMove.Direction;
                 if (!Grid.ContainsKey(newPos))
                 {
                     // cannot move 4 times in a straight row, cannot continue from here

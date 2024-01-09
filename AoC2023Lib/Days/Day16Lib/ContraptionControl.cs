@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Common;
 
 namespace AoC2023Lib.Days.Day16Lib;
@@ -44,8 +45,9 @@ public class ContraptionControl
             '/' => TileMirror.Slash,
             '\\' => TileMirror.Backslash,
             '|' => TileMirror.VerticalSplitter,
-            '-' => TileMirror.HorizontalSplitter
-        };
+            '-' => TileMirror.HorizontalSplitter,
+            _ => throw new InvalidOperationException($"Invalid mirror type {c}")
+        }; ;
     }
 
     public int GetBestEnergizedTilesCount()
@@ -245,8 +247,9 @@ public class ContraptionControl
             Direction.Left => new Vector2(-1, 0),
             Direction.Right => new Vector2(1, 0),
             Direction.Up => new Vector2(0, -1),
-            Direction.Down => new Vector2(0, 1)
-        };
+            Direction.Down => new Vector2(0, 1),
+            _ => throw new InvalidOperationException($"Invalid direction {dir}")
+        } ;
     }
 
 }

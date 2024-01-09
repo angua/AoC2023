@@ -5,7 +5,7 @@ internal class PossibilitiesFinder
     private Dictionary<int, SpringCondition> _row;
     private List<int> _groups;
 
-    private List<int> _damagedPositions;
+    private List<int> _damagedPositions = new();
 
     private Dictionary<(int, int), long> _possibilities = new();
 

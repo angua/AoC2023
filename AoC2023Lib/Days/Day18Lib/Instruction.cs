@@ -50,7 +50,8 @@ public class Instruction
             "R" => Direction.Right,
             "D" => Direction.Down,
             "L" => Direction.Left,
-            "U" => Direction.Up
+            "U" => Direction.Up,
+            _ => throw new InvalidOperationException($"Invalid direction {input}")
         };
     }
 
@@ -62,7 +63,8 @@ public class Instruction
             0 => Direction.Right,
             1 => Direction.Down,
             2 => Direction.Left,
-            3 => Direction.Up
+            3 => Direction.Up,
+            _ => throw new InvalidOperationException($"Invalid direction {input}")
         };
     }
 }

@@ -57,6 +57,8 @@ public class Pipe
             },
 
             PipeOrientation.Start => new List<Vector2>(),
+
+            _ => throw new InvalidOperationException($"Invalid pipe orientation {pipe.Orientation}")
         };
     }
 

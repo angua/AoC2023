@@ -327,7 +327,8 @@ public class Pattern
         return input switch
         {
             0 => 1,
-            1 => 0
+            1 => 0,
+            _ => throw new InvalidOperationException("Invalid byte input")
         };
     }
 

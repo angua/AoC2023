@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 using Common;
 
 namespace AoC2023Lib.Days.Day11Lib;
@@ -195,7 +190,7 @@ public class Astronomy
         {
             if (_emptyColumns.Contains(x))
             {
-                sum += 1000000;
+                sum += _expansion;
             }
             else
             {

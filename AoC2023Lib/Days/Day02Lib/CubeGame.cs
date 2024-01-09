@@ -53,8 +53,9 @@ public class CubeGame
         {
             "red" => CubeColor.red,
             "blue" => CubeColor.blue,
-            "green" => CubeColor.green
-        };
+            "green" => CubeColor.green,
+            _ => throw new InvalidOperationException($"Unknown cube color input {colorString}")
+        }; ;
     }
 
     public Dictionary<CubeColor, int> GetMinimumSet()

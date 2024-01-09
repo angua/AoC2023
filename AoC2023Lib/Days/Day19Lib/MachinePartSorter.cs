@@ -210,7 +210,8 @@ public class MachinePartSorter
             "x" => Category.X,
             "m" => Category.M,
             "a" => Category.A,
-            "s" => Category.S
+            "s" => Category.S,
+            _ => throw new InvalidOperationException($"Invalid category {input}")
         };
     }
 

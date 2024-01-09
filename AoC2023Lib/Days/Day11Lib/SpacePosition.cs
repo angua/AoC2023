@@ -14,6 +14,7 @@ public class SpacePosition
         {
             '#' => SpaceType.Galaxy,
             '.' => SpaceType.Empty,
+            _ => throw new InvalidOperationException($"Invalid space type {input}")
         };
 
     }

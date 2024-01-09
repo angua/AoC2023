@@ -133,7 +133,8 @@ public class LavaLagoon
             Direction.Right => new Vector2(1, 0),
             Direction.Left => new Vector2(-1, 0),
             Direction.Up => new Vector2(0, -1),
-            Direction.Down => new Vector2(0, 1)
+            Direction.Down => new Vector2(0, 1),
+            _ => throw new InvalidOperationException($"Invalid direction {dir}")
         };
     }
 

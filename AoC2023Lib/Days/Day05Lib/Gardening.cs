@@ -4,11 +4,11 @@ namespace AoC2023Lib.Days.Day05Lib;
 
 public class Gardening
 {
-    private Filedata _fileData;
+    private Filedata? _fileData;
 
     private List<Mapping> _mappings = new();
 
-    public List<long> Seeds { get; private set; }
+    public List<long> Seeds { get; private set; } = new();
 
     private List<(long, long)> _seedRanges = new();
 

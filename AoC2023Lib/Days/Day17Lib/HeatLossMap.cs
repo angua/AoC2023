@@ -13,8 +13,8 @@ public class HeatLossMap
     public int CountX => _maxX + 1;
     public int CountY => _maxY + 1;
 
-    public Move BestMove { get; private set; }
-    public Move BestUltraMove { get; private set; }
+    public Move? BestMove { get; private set; }
+    public Move? BestUltraMove { get; private set; }
 
     public void Parse(Filedata fileData)
     {
@@ -32,7 +32,7 @@ public class HeatLossMap
     }
 
 
-    public Move GetLowestHeatLossMove(bool useUltra = false)
+    public Move? GetLowestHeatLossMove(bool useUltra = false)
     {
         // <loss, move>
         var availableMoves = new SortedDictionary<int, List<Move>>();
@@ -243,11 +243,13 @@ public class HeatLossMap
     public List<Vector2> GetRoute(Move? move)
     {
         // move back from the final move over the chain of previous moves
-        var reversePositions = new List<Vector2>
+        var reversePositions = new List<Vector2>();
+        
+        if (move != null) 
         {
-            move.EndPosition
-        };
-
+            reversePositions.Add(move.EndPosition);
+        }
+        
         while (move != null)
         {
             reversePositions.Add(move.StartPosition);

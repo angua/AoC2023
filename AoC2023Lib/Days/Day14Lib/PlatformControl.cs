@@ -166,7 +166,6 @@ public class PlatformControl
         {
             // top row rocks can't move, start with second row
             var startX = _maxX - 1;
-            var endX = 0;
 
             for (int x = startX; x >= 0; x--)
             {
@@ -227,7 +226,8 @@ public class PlatformControl
             Direction.North => new Vector2(0, -1),
             Direction.South => new Vector2(0, 1),
             Direction.West => new Vector2(-1, 0),
-            Direction.East => new Vector2(1, 0)
+            Direction.East => new Vector2(1, 0),
+            _ => throw new InvalidOperationException($"Invalid direction {direction}")
         };
     }
 
@@ -237,7 +237,9 @@ public class PlatformControl
         {
             '.' => LocationType.None,
             '#' => LocationType.SolidRock,
-            'O' => LocationType.RoundRock
+            'O' => LocationType.RoundRock,
+            _ => throw new InvalidOperationException($"Invalid location type {element}")
+
         };
     }
 

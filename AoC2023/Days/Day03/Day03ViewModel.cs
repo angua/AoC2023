@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,7 +16,7 @@ public class Day03ViewModel : ViewModelBase
 
     public Engineering Engineer { get; set; } = new();
 
-    public ObservableCollection<VisualPosition> VisualSchematic { get; set; } = new();
+    public ObservableCollection<PositionedText> VisualSchematic { get; set; } = new();
 
     public int MaxX
     {
@@ -54,54 +53,25 @@ public class Day03ViewModel : ViewModelBase
         _enginePartNumbers = Engineer.FindPartNumbers();
         EnginePartSum = Engineer.GetEnginePartSum(_enginePartNumbers);
 
-
         _gearPositions = Engineer.FindGearPositions();
         GearRatioSum = Engineer.GetGearRatioSum(_gearPositions);
 
-
         Task.Run(ParseVisualSchematic);
-
     }
 
-    private void SetVisualGearPositions(Dictionary<Vector2, int> gearPositions)
-    {
-        foreach (var gearPosition in gearPositions)
-        {
-            var visualPos = VisualSchematic.First(p => p.PositionX == gearPosition.Key.X && p.PositionY == gearPosition.Key.Y);
-            visualPos.IsGear = true;
-        }
-    }
-
-    private void SetVisualPartNumbers(List<SchematicNumber> enginePartNumbers)
-    {
-        foreach (var partNumber in enginePartNumbers)
-        {
-            foreach (var digit in partNumber.Positions)
-            {
-                var visualPos = VisualSchematic.First(p => p.PositionX == digit.Key.X && p.PositionY == digit.Key.Y);
-                visualPos.IsSchematicNumber = true;
-            }
-        }
-    }
 
     private void ParseVisualSchematic()
     {
-        ParsePositions();
-        App.Current.Dispatcher.Invoke(() =>
-        {
-            SetVisualGearPositions(_gearPositions);
-            SetVisualPartNumbers(_enginePartNumbers);
-        });
-    }
+        var visual = new ObservableCollection<PositionedText>();
 
-    private void ParsePositions()
-    {
+        foreach (var pos in Engineer.Schematic)
+        {
+            visual.Add(new VisualPosition(pos));
+        }
         App.Current.Dispatcher.Invoke(() =>
         {
-            foreach (var pos in Engineer.Schematic)
-            {
-                VisualSchematic.Add(new VisualPosition(pos));
-            }
+            VisualSchematic = visual;
+            RaisePropertyChanged(nameof(VisualSchematic));
         });
     }
 }

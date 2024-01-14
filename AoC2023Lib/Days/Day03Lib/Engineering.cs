@@ -5,7 +5,7 @@ namespace AoC2023Lib.Days.Day03Lib;
 
 public class Engineering
 {
-    public Dictionary<Vector2, char> Schematic { get; set; } = new();
+    public Dictionary<Vector2, EnginePosition> Schematic { get; set; } = new();
 
     private int _maxX;
     private int _maxY;
@@ -29,7 +29,7 @@ public class Engineering
             var line = fileData.Lines[y];
             for (int x = 0; x < line.Length; x++)
             {
-                Schematic.Add(new Vector2(x, y), line[x]);
+                Schematic.Add(new Vector2(x, y), new EnginePosition(line[x]));
             }
         }
         _maxX = (int)Schematic.Max(p => p.Key.X);
@@ -46,14 +46,19 @@ public class Engineering
             for (int x = 0; x <= _maxX; x++)
             {
                 var pos = new Vector2(x, y);
+                var part = Schematic[pos];
 
-                if (Char.IsDigit(Schematic[pos]))
+                if (Char.IsDigit(part.Symbol))
                 {
-                    // number 
+                    // start of number 
                     var num = new SchematicNumber();
-                    while (Char.IsDigit(Schematic[pos]))
+
+                    // the rest of the number
+                    while (Char.IsDigit(Schematic[pos].Symbol))
                     {
-                        num.Positions.Add(pos, Schematic[pos]);
+                        num.Positions.Add(pos, Schematic[pos].Symbol);
+                        
+                        // advance to next position
                         x++;
                         pos = new Vector2(x, y);
                         if (x > _maxX)
@@ -61,7 +66,12 @@ public class Engineering
                             break;
                         }
                     }
+
                     numbers.Add(num);
+                    foreach (var numPos in num.Positions)
+                    {
+                        Schematic[numPos.Key].SchematicNumber = num;
+                    }
                 }
             }
         }
@@ -75,7 +85,7 @@ public class Engineering
             var include = false;
             foreach (var neighbor in neighbors)
             {
-                if (neighbor.Value != '.' && !Char.IsDigit(neighbor.Value))
+                if (neighbor.Value.Symbol != '.' && !Char.IsDigit(neighbor.Value.Symbol))
                 {
                     // engine part
                     include = true;
@@ -86,6 +96,12 @@ public class Engineering
             if (include)
             {
                 enginePartNumbers.Add(num);
+
+                foreach (var part in num.Positions)
+                {
+                    Schematic[part.Key].Type = SymbolType.Number;
+                }
+
             }
         }
 
@@ -93,7 +109,7 @@ public class Engineering
     }
 
 
-    private Dictionary<Vector2, char> FindNeighbors(SchematicNumber num)
+    private Dictionary<Vector2, EnginePosition> FindNeighbors(SchematicNumber num)
     {
         var neighborPositions = new HashSet<Vector2>();
 
@@ -111,7 +127,7 @@ public class Engineering
             }
         }
 
-        var result = new Dictionary<Vector2, char>();
+        var result = new Dictionary<Vector2, EnginePosition>();
 
         foreach (var pos in neighborPositions)
         {
@@ -143,9 +159,9 @@ public class Engineering
             // find adjacent schematic numbers
             foreach (var neighborPos in neighborPositions)
             {
-                if (Char.IsDigit(Schematic[neighborPos]))
+                if (Schematic[neighborPos].Type == SymbolType.Number)
                 {
-                    var num = GetSchematicNumber(neighborPos);
+                    var num = Schematic[neighborPos].SchematicNumber;
 
                     // don't add the same number twice
                     if (!neighborSchematicNums.Any(n => n.StartPosition == num.StartPosition))
@@ -160,57 +176,17 @@ public class Engineering
                 // gear ratio = product of the 2 neighbor numbers
                 var gearRatio = neighborSchematicNums[0].Number * neighborSchematicNums[1].Number;
                 result.Add(pos, gearRatio);
+                Schematic[pos].Type = SymbolType.Gear;
             }
-
         }
 
         return result;
-
-    }
-
-    private SchematicNumber GetSchematicNumber(Vector2 neighborPos)
-    {
-        var x = neighborPos.X;
-        var y = neighborPos.Y;
-
-        var pos = neighborPos;
-
-        // move to the left to find the first position that is not part of the number
-        while (Char.IsDigit(Schematic[pos]))
-        {
-            x--;
-            pos = new Vector2(x, y);
-            if (x < 0)
-            {
-                break;
-            }
-        }
-
-        // startposition
-        x++;
-        pos = new Vector2(x, y);
-
-        // move to the right creating the SchematicNumber until we find the first position that is not part of the number
-        var num = new SchematicNumber();
-        while (Char.IsDigit(Schematic[pos]))
-        {
-            num.Positions.Add(pos, Schematic[pos]);
-
-            x++;
-            pos = new Vector2(x, y);
-            if (x > _maxX)
-            {
-                break;
-            }
-        }
-
-        return num;
     }
 
     // Find all positions of * characters in the schematic
     public List<Vector2> GetStarPosítions()
     {
-        return Schematic.Where(p => p.Value == '*').Select(p => p.Key).ToList();
+        return Schematic.Where(p => p.Value.Symbol == '*').Select(p => p.Key).ToList();
     }
 
     public int GetGearRatioSum(Dictionary<Vector2, int> gearPositions)
